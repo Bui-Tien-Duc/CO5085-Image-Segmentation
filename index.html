@@ -1,72 +1,72 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CO5085 - Image Segmentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CO5085 - Semantic segmentation of urban scenes using U-Net on CamVid">
+  <title>CO5085 | CamVid Semantic Segmentation</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f7fb;
-      color: #1d2939;
-    }
-    header {
-      background: #124e78;
-      color: white;
-      padding: 45px 20px;
-      text-align: center;
-    }
-    main {
-      max-width: 850px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    section {
-      background: white;
-      padding: 24px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-    }
-    a { color: #1261a0; }
+    :root{--navy:#13264c;--blue:#2459b5;--bg:#f4f7fb;--ink:#20304a;--muted:#5b6b82;--border:#dce5f0;--white:#fff}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65}
+    header{background:linear-gradient(125deg,#12264d,#2459b5);color:#fff;padding:56px 20px 48px;text-align:center}
+    header .eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:.8rem;opacity:.88}h1{font-size:clamp(1.75rem,4vw,2.75rem);line-height:1.25;margin:14px auto;max-width:900px}header p{max-width:760px;margin:12px auto;color:#e5efff}
+    nav{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}nav .inner{max-width:1100px;margin:auto;display:flex;gap:18px;flex-wrap:wrap;padding:13px 20px}a{color:var(--blue)}nav a{text-decoration:none;font-weight:bold;font-size:.92rem}
+    main{max-width:1100px;margin:30px auto;padding:0 18px}.panel{background:#fff;border:1px solid var(--border);border-radius:15px;padding:26px;margin-bottom:22px;box-shadow:0 3px 14px rgba(17,36,76,.04)}h2{margin:0 0 15px;color:var(--navy);font-size:1.45rem}h3{color:var(--navy);margin-top:24px}p{margin:10px 0}
+    .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:13px;margin:20px 0}.metric{border:1px solid var(--border);background:#f7faff;border-radius:12px;padding:18px}.metric strong{display:block;font-size:1.75rem;color:var(--blue)}.metric span{font-size:.9rem;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;margin-top:15px}th,td{padding:11px 13px;border:1px solid var(--border);text-align:left}th{background:#eaf1fc}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}.figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}.figure img{width:100%;height:auto;display:block}.figure figcaption{padding:12px;font-size:.9rem;color:var(--muted)}.full{grid-column:1/-1}.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.btn{display:inline-block;text-decoration:none;background:var(--blue);color:white;border-radius:9px;padding:10px 17px;font-weight:bold}.btn.secondary{background:#e9f0fc;color:var(--navy)}.note{background:#fff8e6;border-left:4px solid #c9911a;padding:12px 15px;margin-top:18px}.muted{color:var(--muted);font-size:.9rem}footer{text-align:center;padding:26px 15px;color:var(--muted)}@media(max-width:600px){.panel{padding:18px}nav .inner{gap:11px}}
   </style>
 </head>
 <body>
   <header>
-    <h1>IMAGE SEGMENTATION</h1>
-    <p>CO5085 - Deep Learning and Its Applications in Computer Vision</p>
+    <div class="eyebrow">CO5085 · Deep Learning and Its Applications in Computer Vision</div>
+    <h1>Semantic Segmentation of Urban Traffic Scenes Using U-Net</h1>
+    <p>Phân đoạn ngữ nghĩa ảnh giao thông đô thị trên bộ dữ liệu CamVid</p>
+    <p>Bài thực hành Segmentation · 19/10/2026</p>
   </header>
-
+  <nav aria-label="Điều hướng trang">
+    <div class="inner">
+      <a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn & báo cáo</a>
+    </div>
+  </nav>
   <main>
-    <section>
-      <h2>Student Information</h2>
-      <p><strong>Name:</strong> Bui Tien Duc</p>
-      <p><strong>Student ID:</strong> 2680018</p>
-      <p><strong>Course:</strong> CO5085</p>
+    <section class="panel" id="overview">
+      <h2>1. Giới thiệu đề tài</h2>
+      <p>Semantic Segmentation là bài toán gán nhãn ngữ nghĩa cho từng pixel của ảnh. Bài thực hành này xây dựng một pipeline gồm đọc ảnh và mask, tiền xử lý, huấn luyện mô hình U-Net, đánh giá bằng mIoU/Dice và trực quan hóa kết quả dự đoán.</p>
+      <p>Mục tiêu là xác định các vùng như đường, xe, người đi bộ, tòa nhà và bầu trời trong ảnh giao thông đô thị.</p>
     </section>
-
-    <section>
-      <h2>Project Overview</h2>
-      <p>Topic: Image Segmentation using Deep Learning.</p>
-      <p>Project details will be updated later.</p>
+    <section class="panel" id="dataset">
+      <h2>2. Bộ dữ liệu CamVid</h2>
+      <p>Bộ dữ liệu sử dụng 701 ảnh với 11 lớp có nhãn; các pixel <code>unlabeled</code> được bỏ qua khi tính loss và metrics bằng <code>ignore_index=255</code>.</p>
+      <table><thead><tr><th>Tập</th><th>Số ảnh</th></tr></thead><tbody><tr><td>Training</td><td>367</td></tr><tr><td>Validation</td><td>101</td></tr><tr><td>Testing</td><td>233</td></tr><tr><th>Tổng</th><th>701</th></tr></tbody></table>
+      <p class="muted">Các lớp: Sky, Building, Pole, Road, Sidewalk, Tree, SignSymbol, Fence, Car, Pedestrian, Bicyclist.</p>
     </section>
-
-    <section>
-      <h2>Methodology</h2>
-      <p>FCN / U-Net (planned)</p>
-      <p>Evaluation: IoU / Dice (planned)</p>
+    <section class="panel" id="method">
+      <h2>3. Phương pháp và môi trường thực nghiệm</h2>
+      <p>Mô hình U-Net gồm encoder, bottleneck và decoder; skip connections giúp kết hợp đặc trưng ở nhiều mức độ phân giải.</p>
+      <table><tbody><tr><th>Mô hình</th><td>U-Net</td></tr><tr><th>Framework</th><td>PyTorch</td></tr><tr><th>GPU</th><td>NVIDIA GeForce RTX 3050 Ti Laptop GPU (4 GB)</td></tr><tr><th>Kích thước ảnh</th><td>256 × 256</td></tr><tr><th>Batch size</th><td>2</td></tr><tr><th>Epochs</th><td>10</td></tr><tr><th>Loss</th><td>Cross-Entropy Loss (ignore index 255)</td></tr><tr><th>Metrics</th><td>mIoU, Mean Dice</td></tr></tbody></table>
     </section>
-
-    <section>
-      <h2>Experiments and Results</h2>
-      <p>Coming soon.</p>
+    <section class="panel" id="results">
+      <h2>4. Kết quả thực nghiệm</h2>
+      <p class="muted">Số liệu từ lần chạy baseline đã ghi nhận; cập nhật nếu chạy lại và có kết quả mới.</p>
+      <div class="metrics"><div class="metric"><strong>0.4337</strong><span>Best Validation mIoU (epoch 8)</span></div><div class="metric"><strong>0.3797</strong><span>Test mIoU</span></div><div class="metric"><strong>0.4452</strong><span>Test Mean Dice</span></div><div class="metric"><strong>0.5625</strong><span>Test Loss</span></div></div>
+      <p>Kết quả cho thấy pipeline đã huấn luyện và đánh giá thành công. Đây là baseline để tiếp tục so sánh với UNet++ trong A2.</p>
     </section>
-
-    <section>
-      <h2>Source Code and Report</h2>
-      <p>Source code and report will be updated.</p>
+    <section class="panel" id="evidence">
+      <h2>5. Hình minh chứng thực nghiệm</h2>
+      <div class="gallery">
+        <figure class="figure"><img src="A2/results/camvid_sample.png" alt="Ảnh CamVid và mask nhãn thực" loading="lazy"><figcaption>Hình 1. Ảnh mẫu CamVid và nhãn phân đoạn.</figcaption></figure>
+        <figure class="figure"><img src="A2/results/training_curves.png" alt="Biểu đồ huấn luyện U-Net" loading="lazy"><figcaption>Hình 2. Biểu đồ huấn luyện U-Net.</figcaption></figure>
+        <figure class="figure full"><img src="A2/results/prediction.png" alt="Kết quả dự đoán segmentation" loading="lazy"><figcaption>Hình 3. Kết quả phân đoạn dự đoán trên ảnh kiểm thử.</figcaption></figure>
+        <figure class="figure full"><img src="A2/images/train%2010%20epoch.png" alt="Nhật ký huấn luyện 10 epochs" loading="lazy"><figcaption>Hình 4. Nhật ký huấn luyện 10 epochs trên GPU.</figcaption></figure>
+      </div>
+      <div class="note">Hình ảnh được lấy từ kết quả thực nghiệm trong repository. Nếu hình không hiển thị, hãy kiểm tra đúng tên file (phân biệt chữ hoa/chữ thường) và đường dẫn trong thư mục <code>A2/results/</code> hoặc <code>A2/images/</code>.</div>
+    </section>
+    <section class="panel" id="resources">
+      <h2>6. Mã nguồn, báo cáo và tài liệu</h2>
+      <div class="links"><a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2" target="_blank" rel="noopener noreferrer">Mã nguồn Python</a><a class="btn secondary" href="reports/B%C3%A1o%20c%C3%A1o%20B%C3%B9i%20Ti%E1%BA%BFn%20%C4%90%E1%BB%A9c%20MSSV%202680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo PDF</a><a class="btn secondary" href="https://github.com/stonewst/CamVid-for-Segmentation" target="_blank" rel="noopener noreferrer">Nguồn CamVid</a></div>
+      <h3>Định hướng A2</h3><p>So sánh U-Net và UNet++ cho bài toán phân đoạn ngữ nghĩa ảnh giao thông đô thị. UNet++ được đề xuất trong lĩnh vực ảnh y sinh; nghiên cứu dự kiến đánh giá khả năng áp dụng kiến trúc này trên CamVid.</p>
     </section>
   </main>
+  <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
