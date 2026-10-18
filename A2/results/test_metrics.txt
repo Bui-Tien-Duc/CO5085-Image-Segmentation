@@ -1,0 +1,3 @@
+test_loss=0.548880
+test_mIoU=0.380603
+test_mean_dice=0.446893
