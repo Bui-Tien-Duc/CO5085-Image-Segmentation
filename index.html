@@ -28,7 +28,7 @@
   <nav aria-label="Điều hướng trang">
     <div class="inner">
       <a href="#a1">A1 — CNN vs Transformer</a>
-      <a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn & báo cáo</a>
+      <a href="#detection">Detection 26/10</a><a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn & báo cáo</a>
     </div>
   </nav>
   <main>
@@ -122,9 +122,27 @@
         target="_blank" rel="noopener noreferrer">Báo cáo PDF A1.1</a></p>
     </section>
 
-  </main>
+  
+<section class="panel" id="detection">
+<h2>Detection — YOLO11n trên Penn-Fudan</h2>
+<p>Bài thực hành 26/10/2026: fine-tune detector một lớp person. Đã huấn luyện 30 epochs, ảnh 416, batch 2, AdamW, learning rate ban đầu 0,001; seed 42.</p>
+<p>Split tự tạo: train 119 ảnh/290 box, validation 25 ảnh/67 box, test 26 ảnh/66 box. Nhãn bounding box được chuyển từ instance mask.</p>
+<table><thead><tr><th>Tập</th><th>Precision</th><th>Recall</th><th>mAP@0.5</th><th>mAP@0.5:0.95</th></tr></thead><tbody>
+<tr><td>Validation best.pt</td><td>0,925</td><td>0,970</td><td>0,980</td><td>0,826</td></tr>
+<tr><td>Test</td><td>0,892</td><td>0,894</td><td>0,942</td><td>0,736</td></tr></tbody></table>
+<div class="gallery">
+<figure class="figure full"><img src="Detection/results/training_curves.png" alt="Loss và metrics YOLO11n qua 30 epochs" loading="lazy"><figcaption>Quá trình huấn luyện; learning rate có warmup và giảm dần.</figcaption></figure>
+<figure class="figure"><img src="Detection/results/test/BoxPR_curve.png" alt="Đường precision recall trên test" loading="lazy"><figcaption>PR curve test, AP@0.5 bằng 0,942.</figcaption></figure>
+<figure class="figure"><img src="Detection/results/predictions/FudanPed00036.jpg" alt="Dự đoán người đi bộ tại cửa tòa nhà" loading="lazy"><figcaption>Ảnh dự đoán với ngưỡng hiển thị confidence 0,25.</figcaption></figure>
+</div>
+<p class="note">Split ngẫu nhiên theo ảnh, chưa kiểm tra đầy đủ cảnh/người gần giống giữa các tập. Kết quả chưa chứng minh tổng quát hóa ngoài dataset. Chưa thực hiện ReID. Ngưỡng dùng vẽ confusion matrix cần được đối chiếu riêng với P/R tổng hợp.</p>
+<div class="links"><a class="btn" href="reports/Detection_Bui_Tien_Duc_2680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo Detection PDF</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/Detection">Code và hướng dẫn</a><a class="btn secondary" href="Detection/results/test_evaluation.txt">Log đánh giá test</a></div>
+</section>
+
+</main>
   <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
+
 
 
