@@ -56,7 +56,8 @@ Giữ lại LICENSE của repository tác giả trong thư mục mã nguồn.
 ## Trạng thái A1.1
 
 Đã kiểm tra GPU, dữ liệu, EDA và DataLoader.
-ViT đã chạy thử 20 batch train và 10 batch validation.
+ViT và ResNet-18 đã chạy thử; mỗi mô hình 20 batch train và 10 batch validation.
+ResNet-18 sử dụng DataLoader riêng với normalization ImageNet; ViT dùng normalization của checkpoint tương ứng.
 Đây là kiểm tra pipeline, chưa phải kết quả so sánh A1.2.
 
 ## Hướng dẫn cài đặt và chạy lại
@@ -96,10 +97,16 @@ requirements-lock.txt là bản chụp môi trường Windows đã dùng, có c�
 - [Ảnh mẫu](results/sample_images.png)
 - [Phân bố train](results/train_class_distribution.png)
 - [Kiểm tra pipeline ViT](results/vit_pipeline_check.json)
+- [Kiểm tra pipeline ResNet-18](results/resnet18_pipeline_check.json)
+- [Notebook A1.1](PathMNIST_A1_1.ipynb)
 
-Output ở notebook mới được xóa để tránh nhầm là đã chạy lại. File JSON hiện có là bằng chứng lần chạy trước, không phải Accuracy cuối. Chạy lại notebook mới sẽ cập nhật JSON và EDA trên máy.
+Notebook đã được chạy và lưu minh chứng kiểm tra pipeline. Các file JSON chỉ mô tả phép thử trên tập nhỏ, không phải Accuracy cuối hay kết quả tái lập đầy đủ paper. Chạy lại notebook sẽ cập nhật JSON và EDA trên máy. Không dùng test để chọn cấu hình hoặc checkpoint.
 
 ## Phần còn lại
 
-A1.2: kiểm tra CNN, hiện thực tám cấu hình, log/checkpoint, đánh giá và so sánh cuối. Detection YOLO là phần thực hành riêng, chưa có minh chứng fine-tune trong A1.
+A1.2 chưa hoàn thành: hiện thực và huấn luyện tám cấu hình theo protocol, lưu log/checkpoint, chọn checkpoint bằng validation Macro-F1 và đánh giá toàn bộ test để so sánh CNN–Transformer.
+
+Phạm vi tái lập tập trung vào PathMNIST; các cấu hình ResNet-18 và freeze là phần thí nghiệm mở rộng, không được coi là đã tái lập toàn bộ paper.
+
+Detection YOLO là phần thực hành riêng, chưa có minh chứng fine-tune trong A1.
 
