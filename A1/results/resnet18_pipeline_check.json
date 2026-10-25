@@ -1,0 +1,16 @@
+{
+  "purpose": "pipeline_check_only",
+  "model": "resnet18",
+  "weights": "IMAGENET1K_V1",
+  "training_mode": "full_fine_tune_probe",
+  "seed": 42,
+  "train_batches": 20,
+  "train_samples": 40,
+  "validation_batches": 10,
+  "validation_samples": 20,
+  "train_loss": 2.4475341796875,
+  "validation_loss": 2.2392578125,
+  "validation_subset_accuracy": 0.3,
+  "elapsed_seconds": 0.8901029999833554,
+  "peak_allocated_vram_gb": 0.7528872489929199
+}
