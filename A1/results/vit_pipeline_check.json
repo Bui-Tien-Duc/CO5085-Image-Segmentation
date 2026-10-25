@@ -1,0 +1,11 @@
+{
+  "purpose": "pipeline_check_only",
+  "train_batches": 20,
+  "train_samples": 40,
+  "validation_samples": 20,
+  "train_loss": 2.332421875,
+  "validation_loss": 2.290478515625,
+  "validation_subset_accuracy": 0.0,
+  "elapsed_seconds": 2.1233780999900773,
+  "peak_allocated_vram_gb": 1.6227216720581055
+}
