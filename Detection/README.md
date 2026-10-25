@@ -52,4 +52,5 @@ Confusion matrix đi kèm ghi 64 TP, 2 FN, 340 dự đoán không khớp. Không
 
 ## Checkpoint
 File thực nghiệm: Detection/runs/yolo11n_pennfudan_30epochs/weights/best.pt.
-Chưa có file checkpoint hoặc URL tải trong gói này. Cần bổ sung trước khi ghi người chấm có thể chạy inference ngay. Không đưa .venv, dữ liệu thô hoặc tất cả runs lên Git.
+Checkpoint đã huấn luyện:
+[best_yolo11n_pennfudan.pt](checkpoints/best_yolo11n_pennfudan.pt)
