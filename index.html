@@ -22,6 +22,7 @@
     <h1>Semantic Segmentation of Urban Traffic Scenes Using U-Net</h1>
     <p>Phân đoạn ngữ nghĩa ảnh giao thông đô thị trên bộ dữ liệu CamVid</p>
     <p>Bài thực hành Segmentation · 19/10/2026</p>
+    <p>Bùi Tiến Đức · MSSV 2680018</p>
   </header>
   <nav aria-label="Điều hướng trang">
     <div class="inner">
@@ -43,12 +44,14 @@
     <section class="panel" id="method">
       <h2>3. Phương pháp và môi trường thực nghiệm</h2>
       <p>Mô hình U-Net gồm encoder, bottleneck và decoder; skip connections giúp kết hợp đặc trưng ở nhiều mức độ phân giải.</p>
-      <table><tbody><tr><th>Mô hình</th><td>U-Net</td></tr><tr><th>Framework</th><td>PyTorch</td></tr><tr><th>GPU</th><td>NVIDIA GeForce RTX 3050 Ti Laptop GPU (4 GB)</td></tr><tr><th>Kích thước ảnh</th><td>256 × 256</td></tr><tr><th>Batch size</th><td>2</td></tr><tr><th>Epochs</th><td>10</td></tr><tr><th>Loss</th><td>Cross-Entropy Loss (ignore index 255)</td></tr><tr><th>Metrics</th><td>mIoU, Mean Dice</td></tr></tbody></table>
+      <table><tbody><tr><th>Mô hình</th><td>U-Net</td></tr><tr><th>Framework</th><td>PyTorch</td></tr><tr><th>GPU</th><td>NVIDIA GeForce RTX 3050 Ti Laptop GPU (4 GB)</td></tr><tr><th>Kích thước ảnh</th><td>256 × 256</td></tr><tr><th>Batch size</th><td>2</td></tr><tr><th>Epochs</th><td>10</td></tr><tr><th>Optimizer</th><td>AdamW</td></tr><tr><th>Learning rate</th><td>0.001</td></tr><tr><th>Base channels</th><td>16</td></tr><tr><th>Tiền xử lý</th><td>Ảnh RGB về [0, 1]; resize ảnh bằng bilinear, mask bằng nearest; chưa dùng augmentation</td></tr><tr><th>Loss</th><td>Cross-Entropy Loss (ignore index 255)</td></tr><tr><th>Metrics</th><td>mIoU, Mean Dice</td></tr></tbody></table>
     </section>
     <section class="panel" id="results">
       <h2>4. Kết quả thực nghiệm</h2>
-      <p class="muted">Số liệu từ lần chạy baseline đã ghi nhận; cập nhật nếu chạy lại và có kết quả mới.</p>
-      <div class="metrics"><div class="metric"><strong>0.4337</strong><span>Best Validation mIoU (epoch 8)</span></div><div class="metric"><strong>0.3797</strong><span>Test mIoU</span></div><div class="metric"><strong>0.4452</strong><span>Test Mean Dice</span></div><div class="metric"><strong>0.5625</strong><span>Test Loss</span></div></div>
+      <p class="muted">Kết quả baseline U-Net sau 10 epochs. Checkpoint được chọn theo validation mIoU cao nhất và đã được đánh giá lại trên toàn bộ 233 ảnh test; số liệu dưới đây được làm tròn đến 4 chữ số thập phân.</p>
+      <div class="metrics"><div class="metric"><strong>0.4434</strong><span>Best Validation mIoU (epoch 9)</span></div><div class="metric"><strong>0.3806</strong><span>Test mIoU</span></div><div class="metric"><strong>0.4469</strong><span>Test Mean Dice</span></div><div class="metric"><strong>0.5489</strong><span>Test Loss</span></div></div>
+      <p class="muted">Metrics được tính từ confusion matrix cộng dồn trên toàn bộ tập test, bỏ qua pixel nhãn 255 và lấy trung bình trên các lớp có union lớn hơn 0. Dice là chỉ số đánh giá; hàm loss huấn luyện là Cross-Entropy.</p>
+      <div class="links"><a class="btn secondary" href="A2/results/test_metrics_verified.txt">Kết quả kiểm chứng checkpoint</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A2/verify_checkpoint.py">Script đánh giá toàn bộ tập test</a></div>
       <p>Kết quả cho thấy pipeline đã huấn luyện và đánh giá thành công. Đây là baseline để tiếp tục so sánh với UNet++ trong A2.</p>
     </section>
     <section class="panel" id="evidence">
