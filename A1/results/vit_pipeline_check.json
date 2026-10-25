@@ -6,6 +6,6 @@
   "train_loss": 2.332421875,
   "validation_loss": 2.290478515625,
   "validation_subset_accuracy": 0.0,
-  "elapsed_seconds": 2.1233780999900773,
-  "peak_allocated_vram_gb": 1.6227216720581055
+  "elapsed_seconds": 2.2589793000370264,
+  "peak_allocated_vram_gb": 1.6219816207885742
 }
