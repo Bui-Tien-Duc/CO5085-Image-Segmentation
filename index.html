@@ -76,7 +76,7 @@
       <h2>A1.1 — CNN vs Vision Transformer trên PathMNIST</h2>
       <p><strong>Bùi Tiến Đức · MSSV 2680018</strong></p>
       <p>So sánh ResNet-18 và ViT-Base/16 trong phân loại ảnh mô bệnh học; đánh giá ảnh hưởng của pretrained và chiến lược đóng băng backbone.</p>
-      <div class="note"><strong>Trạng thái:</strong> Đã chuẩn bị dữ liệu, thực hiện EDA, kiểm tra DataLoader và chạy thử ViT trên GPU. Chưa hoàn thành thí nghiệm so sánh A1.2. Báo cáo PDF A1.1 đang hoàn thiện.</div>
+      <div class="note"><strong>Trạng thái:</strong> Đã chuẩn bị dữ liệu, thực hiện EDA, kiểm tra DataLoader và chạy thử ViT trên GPU. Chưa hoàn thành thí nghiệm so sánh A1.2. Báo cáo PDF A1.1 được liên kết ở cuối mục này.</div>
       <h3>1. Dataset và EDA</h3>
       <p>PathMNIST gồm 107.180 ảnh RGB thuộc 9 lớp. Giữ nguyên split được cung cấp. Ảnh lưu trữ 28 × 28 được resize lên 224 × 224 khi đưa vào mô hình.</p>
       <table><caption>Số lượng ảnh theo tập</caption><thead><tr><th scope="col">Tập</th><th scope="col">Số ảnh</th></tr></thead><tbody><tr><td>Train</td><td>89.996</td></tr><tr><td>Validation</td><td>10.004</td></tr><tr><td>Test</td><td>7.180</td></tr><tr><th scope="row">Tổng</th><td>107.180</td></tr></tbody></table>
@@ -116,8 +116,9 @@
         <a class="btn secondary" href="A1/results/class_distribution.csv">Thống kê dữ liệu</a>
         <a class="btn secondary" href="A1/results/vit_pipeline_check.json">Minh chứng pipeline</a>
       </div>
-      <p class="muted">Báo cáo PDF A1.1: đang hoàn thiện. Liên kết tải sẽ được bổ sung khi báo cáo được xuất và đưa lên GitHub.</p>
-      <!-- Khi PDF đã tồn tại, thêm liên kết reports/A1_1_Bui_Tien_Duc_2680018.pdf tại đây. -->
+      <p><a class="btn secondary"
+        href="reports/A1_1_Bui_Tien_Duc_2680018.pdf"
+        target="_blank" rel="noopener noreferrer">Báo cáo PDF A1.1</a></p>
     </section>
 
   </main>
