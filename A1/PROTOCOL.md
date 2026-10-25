@@ -30,5 +30,17 @@ Với head-only và partial CNN, các module backbone bị freeze giữ ở eval
 Chọn validation Macro-F1 cao nhất; tie-break validation loss thấp hơn. F1 trên đủ 9 lớp với zero_division=0. Sau chốt cấu hình đánh giá toàn bộ test: Accuracy, Macro-F1, confusion matrix, lỗi điển hình. Ghi thời gian train tách tải model và VRAM cấp phát bằng cùng phương pháp; số tham số tổng/trainable. Không lấy test để chọn LR, epochs hoặc checkpoint.
 
 ## Đã làm và chưa làm
-Đã kiểm tra ViT 20 batch train/10 batch validation. Chưa chạy đủ ma trận hoặc hoàn thành tái lập paper; không dùng phép thử để so sánh với kết quả paper. Notebook riêng PathMNIST_A1_1.ipynb chỉ dùng kiểm tra A1.1, chưa có trainer cho A1.2. YOLO Detection chưa được hoàn thành trong phần này.
 
+Đã kiểm tra dữ liệu, EDA và DataLoader.
+Đã kiểm tra pipeline ViT và ResNet-18; mỗi mô hình chạy thử
+20 batch train và 10 batch validation.
+
+Minh chứng:
+- results/vit_pipeline_check.json
+- results/resnet18_pipeline_check.json
+
+Đây là kiểm tra kỹ thuật trên tập nhỏ, chưa phải kết quả
+huấn luyện đầy đủ hoặc so sánh A1.2.
+
+Chưa hoàn thành ma trận thí nghiệm, đánh giá toàn bộ test
+và tái lập đầy đủ paper. YOLO Detection chưa hoàn thành.
