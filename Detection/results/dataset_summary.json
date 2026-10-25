@@ -1,0 +1,25 @@
+{
+  "purpose": "dataset_preparation_only",
+  "seed": 42,
+  "split_method": "random_image_split_not_official",
+  "counts": {
+    "train": {
+      "images": 119,
+      "boxes": 290
+    },
+    "val": {
+      "images": 25,
+      "boxes": 67
+    },
+    "test": {
+      "images": 26,
+      "boxes": 66
+    }
+  },
+  "class_names": [
+    "person"
+  ],
+  "exact_duplicate_pixels": 0,
+  "near_duplicate_or_scene_leakage_review": "not_done",
+  "limitations": "Random image splits do not guarantee scene or identity independence. Review train/val previews and scene groups before training; regenerate split by groups if required. No training metrics produced."
+}
