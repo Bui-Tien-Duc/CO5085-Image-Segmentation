@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="CO5085 - Semantic segmentation of urban scenes using U-Net on CamVid">
-  <title>CO5085 | CamVid Semantic Segmentation</title>
+  <title>CO5085 | A1 CNN–ViT &amp; CamVid Segmentation</title>
   <style>
     :root{--navy:#13264c;--blue:#2459b5;--bg:#f4f7fb;--ink:#20304a;--muted:#5b6b82;--border:#dce5f0;--white:#fff}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65}
@@ -14,6 +14,7 @@
     main{max-width:1100px;margin:30px auto;padding:0 18px}.panel{background:#fff;border:1px solid var(--border);border-radius:15px;padding:26px;margin-bottom:22px;box-shadow:0 3px 14px rgba(17,36,76,.04)}h2{margin:0 0 15px;color:var(--navy);font-size:1.45rem}h3{color:var(--navy);margin-top:24px}p{margin:10px 0}
     .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:13px;margin:20px 0}.metric{border:1px solid var(--border);background:#f7faff;border-radius:12px;padding:18px}.metric strong{display:block;font-size:1.75rem;color:var(--blue)}.metric span{font-size:.9rem;color:var(--muted)}
     table{width:100%;border-collapse:collapse;margin-top:15px}th,td{padding:11px 13px;border:1px solid var(--border);text-align:left}th{background:#eaf1fc}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}.figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}.figure img{width:100%;height:auto;display:block}.figure figcaption{padding:12px;font-size:.9rem;color:var(--muted)}.full{grid-column:1/-1}.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.btn{display:inline-block;text-decoration:none;background:var(--blue);color:white;border-radius:9px;padding:10px 17px;font-weight:bold}.btn.secondary{background:#e9f0fc;color:var(--navy)}.note{background:#fff8e6;border-left:4px solid #c9911a;padding:12px 15px;margin-top:18px}.muted{color:var(--muted);font-size:.9rem}footer{text-align:center;padding:26px 15px;color:var(--muted)}@media(max-width:600px){.panel{padding:18px}nav .inner{gap:11px}}
+  .panel{scroll-margin-top:90px} .table-wrap{overflow-x:auto} @media(max-width:600px){.gallery{grid-template-columns:minmax(0,1fr)}}
   </style>
 </head>
 <body>
@@ -26,6 +27,7 @@
   </header>
   <nav aria-label="Điều hướng trang">
     <div class="inner">
+      <a href="#a1">A1 — CNN vs Transformer</a>
       <a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn & báo cáo</a>
     </div>
   </nav>
@@ -69,7 +71,57 @@
       <div class="links"><a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2" target="_blank" rel="noopener noreferrer">Mã nguồn Python</a><a class="btn secondary" href="reports/B%C3%A1o%20c%C3%A1o%20B%C3%B9i%20Ti%E1%BA%BFn%20%C4%90%E1%BB%A9c%20MSSV%202680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo PDF</a><a class="btn secondary" href="https://github.com/stonewst/CamVid-for-Segmentation" target="_blank" rel="noopener noreferrer">Nguồn CamVid</a></div>
       <h3>Định hướng A2</h3><p>So sánh U-Net và UNet++ cho bài toán phân đoạn ngữ nghĩa ảnh giao thông đô thị. UNet++ được đề xuất trong lĩnh vực ảnh y sinh; nghiên cứu dự kiến đánh giá khả năng áp dụng kiến trúc này trên CamVid.</p>
     </section>
+
+    <section class="panel" id="a1">
+      <h2>A1.1 — CNN vs Vision Transformer trên PathMNIST</h2>
+      <p><strong>Bùi Tiến Đức · MSSV 2680018</strong></p>
+      <p>So sánh ResNet-18 và ViT-Base/16 trong phân loại ảnh mô bệnh học; đánh giá ảnh hưởng của pretrained và chiến lược đóng băng backbone.</p>
+      <div class="note"><strong>Trạng thái:</strong> Đã chuẩn bị dữ liệu, thực hiện EDA, kiểm tra DataLoader và chạy thử ViT trên GPU. Chưa hoàn thành thí nghiệm so sánh A1.2. Báo cáo PDF A1.1 đang hoàn thiện.</div>
+      <h3>1. Dataset và EDA</h3>
+      <p>PathMNIST gồm 107.180 ảnh RGB thuộc 9 lớp. Giữ nguyên split được cung cấp. Ảnh lưu trữ 28 × 28 được resize lên 224 × 224 khi đưa vào mô hình.</p>
+      <table><caption>Số lượng ảnh theo tập</caption><thead><tr><th scope="col">Tập</th><th scope="col">Số ảnh</th></tr></thead><tbody><tr><td>Train</td><td>89.996</td></tr><tr><td>Validation</td><td>10.004</td></tr><tr><td>Test</td><td>7.180</td></tr><tr><th scope="row">Tổng</th><td>107.180</td></tr></tbody></table>
+      <p><a href="https://medmnist.com/" target="_blank" rel="noopener noreferrer">Nguồn MedMNIST</a> · License dữ liệu: CC BY 4.0.</p>
+      <p class="muted">Dataset có 9 lớp, thấp hơn mức ưu tiên ≥ 10 lớp của đề; lựa chọn gắn với paper tái lập và quy mô dữ liệu lớn. Resize không bổ sung chi tiết ảnh mới.</p>
+      <div class="gallery">
+        <figure class="figure"><img src="A1/results/sample_images.png" alt="Ảnh train đại diện cho 9 lớp PathMNIST" loading="lazy"><figcaption>Ảnh train đại diện cho từng lớp.</figcaption></figure>
+        <figure class="figure"><img src="A1/results/train_class_distribution.png" alt="Phân bố số ảnh train theo lớp PathMNIST" loading="lazy"><figcaption>Phân bố lớp trên tập train.</figcaption></figure>
+      </div>
+      <h3>2. Paper nền và phạm vi</h3>
+      <p>Halder, A., Gharami, S., Sadhu, P., Singh, P. K., Woźniak, M., &amp; Ijaz, M. F. (2024). <em>Implementing vision transformer for classifying 2D biomedical images.</em> Scientific Reports, 14, 12567. <a href="https://doi.org/10.1038/s41598-024-63094-9" target="_blank" rel="noopener noreferrer">DOI và bài xuất bản</a>.</p>
+      <p>Dự kiến tái lập nhánh ViT trên PathMNIST, bổ sung CNN và các chế độ huấn luyện theo yêu cầu A1. Đây là tái lập có giới hạn và mở rộng, chưa phải tái lập toàn bộ paper. <a href="https://github.com/arindam369/MedMNIST-ViT" target="_blank" rel="noopener noreferrer">Code tác giả</a>.</p>
+      <h3>3. Protocol dự kiến</h3>
+      <table><tbody>
+        <tr><th scope="row">Mô hình</th><td>ResNet-18 (CNN) và ViT-Base/16 (Transformer)</td></tr>
+        <tr><th scope="row">Đầu vào / batch</th><td>224 × 224 RGB / batch size 2</td></tr>
+        <tr><th scope="row">Ngân sách</th><td>Dự kiến 10 epochs mỗi cấu hình, chạy lần lượt; chưa khẳng định đủ hội tụ</td></tr>
+        <tr><th scope="row">Optimizer / loss</th><td>AdamW / CrossEntropyLoss</td></tr>
+        <tr><th scope="row">Learning rate</th><td>Scratch: 1e-4; head-only: 1e-3; partial/full: 1e-5</td></tr>
+        <tr><th scope="row">Seed dự kiến</th><td>42</td></tr>
+        <tr><th scope="row">Tiền xử lý</th><td>Train: resize và lật ngang ngẫu nhiên; validation/test: resize, không augmentation ngẫu nhiên. Normalization theo checkpoint từng mô hình, dùng nhất quán cho bản scratch tương ứng; xác nhận trước thí nghiệm chính.</td></tr>
+        <tr><th scope="row">Precision</th><td>Mixed precision khi chạy GPU</td></tr>
+        <tr><th scope="row">Chọn checkpoint</th><td>Validation Macro-F1 cao nhất; không dùng test để chọn cấu hình</td></tr>
+        <tr><th scope="row">Đánh giá</th><td>Accuracy, Macro-F1, confusion matrix, thời gian, VRAM, số tham số tổng và trainable</td></tr>
+      </tbody></table>
+      <div class="table-wrap"><table><caption>Các thí nghiệm dự kiến, chưa phải kết quả đã chạy</caption><thead><tr><th scope="col">Chế độ</th><th scope="col">ResNet-18</th><th scope="col">ViT-Base/16</th></tr></thead><tbody>
+        <tr><td>From-scratch</td><td>Khởi tạo ngẫu nhiên, train toàn bộ</td><td>Khởi tạo ngẫu nhiên, train toàn bộ</td></tr>
+        <tr><td>Pretrained: head-only</td><td>Chỉ train fc</td><td>Chỉ train classifier</td></tr>
+        <tr><td>Pretrained: partial</td><td>Train layer4 và fc</td><td>Train 2 encoder block cuối, layernorm cuối và classifier</td></tr>
+        <tr><td>Pretrained: full</td><td>Fine-tune toàn bộ</td><td>Fine-tune toàn bộ</td></tr>
+      </tbody></table></div>
+      <h3>4. Minh chứng kiểm tra pipeline</h3>
+      <p>Môi trường đã kiểm tra: Python 3.11, PyTorch 2.11.0+cu128, Transformers 4.57.6; GPU NVIDIA GeForce RTX 3050 Ti Laptop GPU. ViT đã chạy thử 20 batch train và 10 batch validation với batch size 2; VRAM đỉnh PyTorch cấp phát khoảng 1,62 GB.</p>
+      <p class="muted">Phép thử chỉ xác nhận pipeline hoạt động. Loss/accuracy trên tập nhỏ không dùng làm kết quả cuối hay so sánh với paper. Phần YOLO Detection là thực hành riêng, chưa có kết quả fine-tune được trình bày tại đây.</p>
+      <div class="links">
+        <a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A1" target="_blank" rel="noopener noreferrer">Mã nguồn A1</a>
+        <a class="btn secondary" href="A1/results/class_distribution.csv">Thống kê dữ liệu</a>
+        <a class="btn secondary" href="A1/results/vit_pipeline_check.json">Minh chứng pipeline</a>
+      </div>
+      <p class="muted">Báo cáo PDF A1.1: đang hoàn thiện. Liên kết tải sẽ được bổ sung khi báo cáo được xuất và đưa lên GitHub.</p>
+      <!-- Khi PDF đã tồn tại, thêm liên kết reports/A1_1_Bui_Tien_Duc_2680018.pdf tại đây. -->
+    </section>
+
   </main>
   <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
+
