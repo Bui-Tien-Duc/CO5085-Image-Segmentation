@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CO5085 - Semantic segmentation of urban scenes using U-Net on CamVid">
+  <meta name="description" content="CO5085 — A1 CNN và ViT trên PathMNIST; thực hành U-Net trên CamVid">
   <title>CO5085 | A1 CNN–ViT &amp; CamVid Segmentation</title>
   <style>
     :root{--navy:#13264c;--blue:#2459b5;--bg:#f4f7fb;--ink:#20304a;--muted:#5b6b82;--border:#dce5f0;--white:#fff}
@@ -20,8 +20,8 @@
 <body>
   <header>
     <div class="eyebrow">CO5085 · Deep Learning and Its Applications in Computer Vision</div>
-    <h1>Semantic Segmentation of Urban Traffic Scenes Using U-Net</h1>
-    <p>Phân đoạn ngữ nghĩa ảnh giao thông đô thị trên bộ dữ liệu CamVid</p>
+    <h1>CO5085 — Bài tập lớn và thực hành thị giác máy tính</h1>
+    <p>A1: CNN–ViT trên PathMNIST · Thực hành phân đoạn: U-Net trên CamVid</p>
     <p>Bài thực hành Segmentation · 19/10/2026</p>
     <p>Bùi Tiến Đức · MSSV 2680018</p>
   </header>
@@ -108,6 +108,7 @@
         <tr><td>Pretrained: partial</td><td>Train layer4 và fc</td><td>Train 2 encoder block cuối, layernorm cuối và classifier</td></tr>
         <tr><td>Pretrained: full</td><td>Fine-tune toàn bộ</td><td>Fine-tune toàn bộ</td></tr>
       </tbody></table></div>
+      <p><a href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/PROTOCOL.md">Protocol chi tiết và preprocessing dự kiến</a></p>
       <h3>4. Minh chứng kiểm tra pipeline</h3>
       <p>Môi trường đã kiểm tra: Python 3.11, PyTorch 2.11.0+cu128, Transformers 4.57.6; GPU NVIDIA GeForce RTX 3050 Ti Laptop GPU. ViT đã chạy thử 20 batch train và 10 batch validation với batch size 2; VRAM đỉnh PyTorch cấp phát khoảng 1,62 GB.</p>
       <p class="muted">Phép thử chỉ xác nhận pipeline hoạt động. Loss/accuracy trên tập nhỏ không dùng làm kết quả cuối hay so sánh với paper. Phần YOLO Detection là thực hành riêng, chưa có kết quả fine-tune được trình bày tại đây.</p>
@@ -125,4 +126,5 @@
   <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
+
 

@@ -1,0 +1,11 @@
+# Install CUDA PyTorch first; see README.
+numpy==2.4.6
+pandas==3.1.0
+matplotlib==3.11.2
+pillow==12.3.0
+scikit-learn==1.9.1
+transformers==4.57.6
+accelerate==1.15.0
+jupyterlab==4.6.4
+ipykernel==7.4.0
+

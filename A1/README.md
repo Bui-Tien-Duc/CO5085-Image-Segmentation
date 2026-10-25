@@ -59,19 +59,47 @@ Giữ lại LICENSE của repository tác giả trong thư mục mã nguồn.
 ViT đã chạy thử 20 batch train và 10 batch validation.
 Đây là kiểm tra pipeline, chưa phải kết quả so sánh A1.2.
 
-## Hướng dẫn kiểm tra
+## Hướng dẫn cài đặt và chạy lại
 
-1. Tải PathMNIST và đặt tại `A1/data/pathmnist.npz`.
-2. Mở notebook `MedMNIST-ViT-main/PathMNIST.ipynb`.
-3. Chọn kernel môi trường A1.
-4. Các ô bổ sung hiện dùng đường dẫn máy cá nhân:
-   sửa `data_path` theo máy trước khi chạy.
-5. Chạy lần lượt các ô kiểm tra môi trường, EDA,
-   DataLoader và pipeline; chưa dùng Run All.
+Chạy PowerShell từ thư mục A1. Nếu đã cài đúng môi trường, không cần cài lại.
 
-## Minh chứng
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+.\.venv\Scripts\python.exe -m pip install -r requirements-a1.txt
+.\.venv\Scripts\python.exe -m pip check
+.\.venv\Scripts\python.exe -m jupyterlab
+```
 
-- results/class_distribution.csv
-- results/sample_images.png
-- results/train_class_distribution.png
-- results/vit_pipeline_check.json
+Chọn kernel A1. Mở **PathMNIST_A1_1.ipynb**, chạy theo thứ tự; notebook này tách riêng khỏi các ô và output gốc tác giả. Dùng đường dẫn tương đối, chạy từ A1 hoặc gốc repo.
+
+Tải [pathmnist.npz](https://zenodo.org/records/10519652/files/pathmnist.npz?download=1) vào A1/data. Kiểm tra checksum từ gốc repo:
+
+```powershell
+Get-FileHash .\A1\data\pathmnist.npz -Algorithm MD5
+```
+
+MD5 dự kiến: a8b06965200029087d5bd730944a56c1. Không đưa dữ liệu hoặc .venv lên GitHub.
+
+requirements-lock.txt là bản chụp môi trường Windows đã dùng, có cả YOLO và các phụ thuộc khác. Nó không chứa cấu hình index tải CUDA; không coi pip install -r requirements-lock.txt từ PyPI mặc định là hướng dẫn đầy đủ. requirements-a1.txt là danh sách chọn từ phiên bản môi trường đã ghi; chưa kiểm thử cài mới ở máy khác.
+
+## Protocol và báo cáo
+
+- [Protocol chi tiết](PROTOCOL.md)
+- [PDF A1.1](../reports/A1_1_Bui_Tien_Duc_2680018.pdf)
+- [Website A1](https://bui-tien-duc.github.io/CO5085-Image-Segmentation/#a1)
+
+## Minh chứng đã chạy
+
+- [Thống kê lớp](results/class_distribution.csv)
+- [Ảnh mẫu](results/sample_images.png)
+- [Phân bố train](results/train_class_distribution.png)
+- [Kiểm tra pipeline ViT](results/vit_pipeline_check.json)
+
+Output ở notebook mới được xóa để tránh nhầm là đã chạy lại. File JSON hiện có là bằng chứng lần chạy trước, không phải Accuracy cuối. Chạy lại notebook mới sẽ cập nhật JSON và EDA trên máy.
+
+## Phần còn lại
+
+A1.2: kiểm tra CNN, hiện thực tám cấu hình, log/checkpoint, đánh giá và so sánh cuối. Detection YOLO là phần thực hành riêng, chưa có minh chứng fine-tune trong A1.
+
