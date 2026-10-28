@@ -1,0 +1,21 @@
+{
+  "model": "resnet18",
+  "mode": "head",
+  "split": "test",
+  "samples": 7180,
+  "accuracy": 0.8277158774373259,
+  "macro_f1": 0.761958919181071,
+  "loss": 0.4932721746001071,
+  "checkpoint_epoch": 6,
+  "checkpoint_sha256": "92fd6ead464b2dcaedb46ff379db7bb78f198e0b88e3d5cc81af48cba6c03030",
+  "dataset_md5": "a8b06965200029087d5bd730944a56c1",
+  "source_run": "resnet18_head_20261026_221358",
+  "device": "cuda:0",
+  "torch": "2.11.0+cu128",
+  "torchvision": "0.26.0+cu128",
+  "amp": true,
+  "training_performed": false,
+  "selection": "validation macro_f1 highest; tie validation loss lowest",
+  "confusion_matrix_rows": "true",
+  "confusion_matrix_columns": "predicted"
+}
