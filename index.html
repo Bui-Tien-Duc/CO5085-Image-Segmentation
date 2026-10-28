@@ -160,6 +160,14 @@
         <figure class="figure full"><img src="A1/results/a1_2/evaluation_final/partial/sample_predictions.png" alt="ResNet-18 Partial: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test" loading="lazy"><figcaption>ResNet-18 Partial: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test.</figcaption></figure>
       </div>
       <p>Với partial, các lớp có test F1 thấp gồm Debris (49,45%), Cancer-associated stroma (51,46%) và Smooth muscle (61,23%). Ví dụ test index 19 có nhãn thật Smooth muscle (5), dự đoán Cancer-associated stroma (7), confidence 0,989. Confidence không bảo đảm dự đoán đúng.</p>
+
+      <h3>Checkpoint đã huấn luyện</h3>
+      <div class="links">
+        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_head_best.pt">Tải ResNet-18 head (best.pt)</a>
+        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_partial_best.pt">Tải ResNet-18 partial (best.pt)</a>
+        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-2-resnet18-v1" target="_blank" rel="noopener noreferrer">Release và thông tin checkpoint</a>
+      </div>
+      <p class="muted">Head: epoch 6; partial: epoch 7. Để chạy script đánh giá, đặt mỗi file tải về thành best.pt trong thư mục run tương ứng; xem hướng dẫn trong A1/README.md. Không cần huấn luyện lại.</p>
       <h3>Báo cáo và dữ liệu kiểm chứng</h3>
       <div class="links">
         <a class="btn secondary" href="reports/A1_2_Bui_Tien_Duc_2680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo PDF A1.2</a>
@@ -170,7 +178,7 @@
         <a class="btn secondary" href="A1/results/a1_2/evaluation_final/partial/test_metrics.json">Test metrics partial</a>
         <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/finish_a1_2.py">Script đánh giá</a>
       </div>
-      <p class="muted">Báo cáo Word/PDF A1.2 đã được công bố trong thư mục reports. SHA256 của từng checkpoint được lưu trong test_metrics.json. Đường dẫn tải checkpoint sẽ được bổ sung sau khi công bố.</p>
+      <p class="muted">Báo cáo Word/PDF A1.2 đã được công bố trong thư mục reports. SHA256 của từng checkpoint được lưu trong test_metrics.json. Hai checkpoint đã được công bố trên GitHub Releases; SHA256 do GitHub cung cấp khớp với test_metrics.json.</p>
     </section>
 
 <section class="panel" id="detection">
@@ -193,6 +201,7 @@
   <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
+
 
 
 

@@ -78,7 +78,9 @@ Chọn kernel A1. Mở **PathMNIST_A1_1.ipynb**, chạy theo thứ tự; noteboo
 Tải [pathmnist.npz](https://zenodo.org/records/10519652/files/pathmnist.npz?download=1) vào A1/data. Kiểm tra checksum từ gốc repo:
 
 ```powershell
-Get-FileHash .\A1\data\pathmnist.npz -Algorithm MD5
+Get-FileHash .\A1\results\a1_2\resnet18_head_20261026_221358\best.pt -Algorithm SHA256
+Get-FileHash .\A1\results\a1_2\resnet18_partial_20261028_071505\best.pt -Algorithm SHA256
+.\A1\.venv\Scripts\python.exe .\A1\finish_a1_2.py --output .\A1\results\a1_2\evaluation_recheck
 ```
 
 MD5 dự kiến: a8b06965200029087d5bd730944a56c1. Không đưa dữ liệu hoặc .venv lên GitHub.
@@ -104,9 +106,46 @@ Notebook đã được chạy và lưu minh chứng kiểm tra pipeline. Các fi
 
 ## Phần còn lại
 
-A1.2 chưa hoàn thành: hiện thực và huấn luyện tám cấu hình theo protocol, lưu log/checkpoint, chọn checkpoint bằng validation Macro-F1 và đánh giá toàn bộ test để so sánh CNN–Transformer.
+Đã hoàn thành ResNet-18 head và partial, mỗi cấu hình 10 epochs và đánh giá toàn bộ test. Các cấu hình ViT, scratch và full chưa thực hiện chính thức; so sánh CNN–Transformer chưa hoàn thành. Kế hoạch tám cấu hình ở trên là phạm vi dự kiến.
 
 Phạm vi tái lập tập trung vào PathMNIST; các cấu hình ResNet-18 và freeze là phần thí nghiệm mở rộng, không được coi là đã tái lập toàn bộ paper.
 
-Detection YOLO là phần thực hành riêng, chưa có minh chứng fine-tune trong A1.
+Detection YOLO là phần thực hành riêng; xem [kết quả và hướng dẫn Detection](../Detection/README.md).
+
+
+## A1.2 kết quả và checkpoint đã công bố
+
+| Cấu hình | Best epoch | Test Accuracy | Test Macro-F1 |
+|---|---:|---:|---:|
+| ResNet-18 head | 6 | 82,77% | 76,20% |
+| ResNet-18 partial | 7 | 86,00% | 80,04% |
+
+Checkpoint được chọn bằng validation Macro-F1, không dùng test để chọn checkpoint.
+Mỗi cấu hình chỉ có một seed. Learning rate head 1e-3 và partial 1e-5; chưa tách riêng tác động của freeze.
+
+[Release a1-2-resnet18-v1](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-2-resnet18-v1)
+
+- [resnet18_head_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_head_best.pt) — 44,798,347 bytes.
+  SHA256: `92fd6ead464b2dcaedb46ff379db7bb78f198e0b88e3d5cc81af48cba6c03030`.
+- [resnet18_partial_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_partial_best.pt) — 44,798,795 bytes.
+  SHA256: `5957ee09a030e0a49c7de86150df9e78115dbc5887cc50b40a887a1f9c16f540`.
+
+### Đánh giá lại mà không train
+
+Chạy từ gốc repository. Đặt dữ liệu tại `A1/data/pathmnist.npz`.
+Tải head về `A1/results/a1_2/resnet18_head_20261026_221358/best.pt`;
+tải partial về `A1/results/a1_2/resnet18_partial_20261028_071505/best.pt`.
+Giữ config.json, history.csv và summary.json tương ứng đã có trên repository.
+
+```powershell
+Get-FileHash .\A1\results\a1_2\resnet18_head_20261026_221358\best.pt -Algorithm SHA256
+Get-FileHash .\A1\results\a1_2\resnet18_partial_20261028_071505\best.pt -Algorithm SHA256
+.\A1\.venv\Scripts\python.exe .\A1\finish_a1_2.py --output .\A1\results\a1_2\evaluation_recheck
+```
+
+Chọn thư mục output chưa tồn tại. Không cần chạy lại nếu chỉ xem kết quả.
+- [Kết quả test và hình](results/a1_2/evaluation_final/A1_2_report.html)
+- [Bảng so sánh](results/a1_2/evaluation_final/comparison.csv)
+- [Word A1.2](../reports/A1_2_Bui_Tien_Duc_2680018.docx)
+- [PDF A1.2](../reports/A1_2_Bui_Tien_Duc_2680018.pdf)
 
