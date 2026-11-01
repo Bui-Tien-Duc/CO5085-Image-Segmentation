@@ -27,13 +27,13 @@
 <p>Bùi Tiến Đức · MSSV 2680018</p>
 </header>
 <nav aria-label="Điều hướng trang">
-<div class="inner">
+<div class="inner"><a href="#exercises">Bài tập E1–E3</a>
 <a href="#a1">A1.1 — Dữ liệu &amp; protocol</a>
 <a href="#a1-2">A1.2 — Kết quả test</a>
 <a href="#detection">Detection 26/10</a><a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn &amp; báo cáo</a>
 </div>
 </nav>
-<main>
+<main><section aria-labelledby="exercises-title" class="panel" id="exercises"><h2 id="exercises-title">Bài tập E1–E3</h2><p>Dataset dự kiến: Fashion-MNIST, dùng chung split cho ba bài. Hiện đã tạo khung và kế hoạch; chưa có kết quả thực nghiệm.</p><div class="table-wrap"><table><thead><tr><th>Bài</th><th>Nội dung</th><th>Hạn 23:59 GMT+7</th><th>Trạng thái</th></tr></thead><tbody><tr><td>E1</td><td>Softmax, MLP, CNN</td><td>02/11/2026</td><td>Chưa thực hiện</td></tr><tr><td>E2</td><td>MSA tự viết/PyTorch và ≥ 2 tokenization</td><td>02/11/2026</td><td>Chưa thực hiện</td></tr><tr><td>E3</td><td>LSTM, GRU và baseline E1</td><td>09/11/2026</td><td>Chưa thực hiện</td></tr></tbody></table></div><p>Paper dự kiến: Dropout (JMLR 2014), External Attention (IEEE TPAMI 2023), Recurrent Attention Unit (Neurocomputing 2023). Các mở rộng không thay thế yêu cầu bắt buộc và chưa được ghi nhận là đã tái lập.</p><div class="links"><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E1">E1 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E2">E2 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E3">E3 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/Exercises">Protocol và khung báo cáo</a></div><p class="muted">Một PDF chung cho E1–E3 sẽ được bổ sung tại reports/exercises.pdf sau khi có nội dung thực nghiệm. Chưa có file PDF để tải.</p></section>
 <section class="panel" id="overview">
 <h2>1. Giới thiệu đề tài</h2>
 <p>Semantic Segmentation là bài toán gán nhãn ngữ nghĩa cho từng pixel của ảnh. Bài thực hành này xây dựng một pipeline gồm đọc ảnh và mask, tiền xử lý, huấn luyện mô hình U-Net, đánh giá bằng mIoU/Dice và trực quan hóa kết quả dự đoán.</p>
