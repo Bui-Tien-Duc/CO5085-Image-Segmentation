@@ -106,7 +106,7 @@ Notebook đã được chạy và lưu minh chứng kiểm tra pipeline. Các fi
 
 ## Phần còn lại
 
-Đã hoàn thành ResNet-18 head và partial, mỗi cấu hình 10 epochs và đánh giá toàn bộ test. Các cấu hình ViT, scratch và full chưa thực hiện chính thức; so sánh CNN–Transformer chưa hoàn thành. Kế hoạch tám cấu hình ở trên là phạm vi dự kiến.
+Đã hoàn thành ResNet-18 head và partial, mỗi cấu hình 10 epochs và đánh giá toàn bộ test. ViT head đã hoàn thành 10 epochs và đánh giá test. Scratch, full và ViT partial chưa thực hiện; đã có so sánh CNN–Transformer ở chế độ head. Kế hoạch tám cấu hình ở trên là phạm vi dự kiến.
 
 Phạm vi tái lập tập trung vào PathMNIST; các cấu hình ResNet-18 và freeze là phần thí nghiệm mở rộng, không được coi là đã tái lập toàn bộ paper.
 
@@ -149,3 +149,35 @@ Chọn thư mục output chưa tồn tại. Không cần chạy lại nếu ch�
 - [Word A1.2](../reports/A1_2_Bui_Tien_Duc_2680018.docx)
 - [PDF A1.2](../reports/A1_2_Bui_Tien_Duc_2680018.pdf)
 
+
+
+## Cập nhật CNN–ViT ngày 01/11/2026
+
+Đã hoàn thành ResNet-18 head, ResNet-18 partial và ViT head, 10 epochs mỗi cấu hình. So sánh chính: ResNet-18 head và ViT head; partial là bổ sung. Chưa thực hiện toàn bộ tám cấu hình hoặc tái lập đầy đủ paper.
+
+| Mô hình | Best epoch | Test Accuracy | Test Macro-F1 | Phút train + val |
+|---|---:|---:|---:|---:|
+| ResNet-18 head | 6 | 82,77% | 76,20% | 80,53 |
+| ResNet-18 partial | 7 | 86,00% | 80,04% | 167,26 |
+| ViT head | 2 | 90,24% | 85,92% | 228,51 |
+
+Một seed mỗi cấu hình; nguồn pretrained và normalization khác nhau. Kết quả không chứng minh ưu thế chung của Transformer. Kết quả test CNN đã được xem trước khi triển khai ViT; không điều chỉnh thêm theo test.
+
+[Release ViT](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-2-cnn-vit-v2) · [Tải vit_head_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-cnn-vit-v2/vit_head_best.pt)
+
+SHA256 ViT: `4965f4597f540436e83c2406b10886d15216cf66e125117bdfb47885724db4f3`.
+
+Đặt file ViT tải về thành `A1/results/a1_2/vit_head_resume_v1/best.pt`; giữ config/history/summary của cùng run đã có trên GitHub. Chạy từ gốc repo, output mới chưa tồn tại:
+
+```powershell
+.\A1\.venv\Scripts\python.exe .\A1\evaluate_vit_head.py --output .\A1\results\a1_2\evaluation_cnn_vit_recheck
+```
+
+Script chỉ evaluate ViT và đọc lại metrics CNN trong `evaluation_final`; không train và không chạy test lại CNN.
+
+- [Bảng CNN–ViT](results/a1_2/evaluation_cnn_vit/comparison_cnn_vit.csv)
+- [HTML CNN–ViT](results/a1_2/evaluation_cnn_vit/CNN_ViT_report.html)
+- [Word cập nhật](../reports/A1_2_Bui_Tien_Duc_2680018.docx)
+- [PDF cập nhật](../reports/A1_2_Bui_Tien_Duc_2680018.pdf)
+
+`last.pt` phục vụ resume, không phải checkpoint để đánh giá cuối và không cần đưa lên Git.

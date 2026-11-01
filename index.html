@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CO5085 — Kết quả ResNet-18 head và partial trên PathMNIST; U-Net trên CamVid; YOLO11n trên Penn-Fudan">
-  <title>CO5085 | A1 CNN–ViT &amp; CamVid Segmentation</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CO5085 — Kết quả ResNet-18 head và partial trên PathMNIST; U-Net trên CamVid; YOLO11n trên Penn-Fudan" name="description"/>
+<title>CO5085 | A1 CNN–ViT &amp; CamVid Segmentation</title>
+<style>
     :root{--navy:#13264c;--blue:#2459b5;--bg:#f4f7fb;--ink:#20304a;--muted:#5b6b82;--border:#dce5f0;--white:#fff}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65}
     header{background:linear-gradient(125deg,#12264d,#2459b5);color:#fff;padding:56px 20px 48px;text-align:center}
@@ -18,169 +19,146 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="eyebrow">CO5085 · Deep Learning and Its Applications in Computer Vision</div>
-    <h1>CO5085 — Bài tập lớn và thực hành thị giác máy tính</h1>
-    <p>A1: CNN–ViT trên PathMNIST · Thực hành phân đoạn: U-Net trên CamVid</p>
-    <p>Bài thực hành Segmentation · 19/10/2026</p>
-    <p>Bùi Tiến Đức · MSSV 2680018</p>
-  </header>
-  <nav aria-label="Điều hướng trang">
-    <div class="inner">
-      <a href="#a1">A1.1 — Dữ liệu &amp; protocol</a>
-      <a href="#a1-2">A1.2 — Kết quả test</a>
-      <a href="#detection">Detection 26/10</a><a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn & báo cáo</a>
-    </div>
-  </nav>
-  <main>
-    <section class="panel" id="overview">
-      <h2>1. Giới thiệu đề tài</h2>
-      <p>Semantic Segmentation là bài toán gán nhãn ngữ nghĩa cho từng pixel của ảnh. Bài thực hành này xây dựng một pipeline gồm đọc ảnh và mask, tiền xử lý, huấn luyện mô hình U-Net, đánh giá bằng mIoU/Dice và trực quan hóa kết quả dự đoán.</p>
-      <p>Mục tiêu là xác định các vùng như đường, xe, người đi bộ, tòa nhà và bầu trời trong ảnh giao thông đô thị.</p>
-    </section>
-    <section class="panel" id="dataset">
-      <h2>2. Bộ dữ liệu CamVid</h2>
-      <p>Bộ dữ liệu sử dụng 701 ảnh với 11 lớp có nhãn; các pixel <code>unlabeled</code> được bỏ qua khi tính loss và metrics bằng <code>ignore_index=255</code>.</p>
-      <table><thead><tr><th>Tập</th><th>Số ảnh</th></tr></thead><tbody><tr><td>Training</td><td>367</td></tr><tr><td>Validation</td><td>101</td></tr><tr><td>Testing</td><td>233</td></tr><tr><th>Tổng</th><th>701</th></tr></tbody></table>
-      <p class="muted">Các lớp: Sky, Building, Pole, Road, Sidewalk, Tree, SignSymbol, Fence, Car, Pedestrian, Bicyclist.</p>
-    </section>
-    <section class="panel" id="method">
-      <h2>3. Phương pháp và môi trường thực nghiệm</h2>
-      <p>Mô hình U-Net gồm encoder, bottleneck và decoder; skip connections giúp kết hợp đặc trưng ở nhiều mức độ phân giải.</p>
-      <table><tbody><tr><th>Mô hình</th><td>U-Net</td></tr><tr><th>Framework</th><td>PyTorch</td></tr><tr><th>GPU</th><td>NVIDIA GeForce RTX 3050 Ti Laptop GPU (4 GB)</td></tr><tr><th>Kích thước ảnh</th><td>256 × 256</td></tr><tr><th>Batch size</th><td>2</td></tr><tr><th>Epochs</th><td>10</td></tr><tr><th>Optimizer</th><td>AdamW</td></tr><tr><th>Learning rate</th><td>0.001</td></tr><tr><th>Base channels</th><td>16</td></tr><tr><th>Tiền xử lý</th><td>Ảnh RGB về [0, 1]; resize ảnh bằng bilinear, mask bằng nearest; chưa dùng augmentation</td></tr><tr><th>Loss</th><td>Cross-Entropy Loss (ignore index 255)</td></tr><tr><th>Metrics</th><td>mIoU, Mean Dice</td></tr></tbody></table>
-    </section>
-    <section class="panel" id="results">
-      <h2>4. Kết quả thực nghiệm</h2>
-      <p class="muted">Kết quả baseline U-Net sau 10 epochs. Checkpoint được chọn theo validation mIoU cao nhất và đã được đánh giá lại trên toàn bộ 233 ảnh test; số liệu dưới đây được làm tròn đến 4 chữ số thập phân.</p>
-      <div class="metrics"><div class="metric"><strong>0.4434</strong><span>Best Validation mIoU (epoch 9)</span></div><div class="metric"><strong>0.3806</strong><span>Test mIoU</span></div><div class="metric"><strong>0.4469</strong><span>Test Mean Dice</span></div><div class="metric"><strong>0.5489</strong><span>Test Loss</span></div></div>
-      <p class="muted">Metrics được tính từ confusion matrix cộng dồn trên toàn bộ tập test, bỏ qua pixel nhãn 255 và lấy trung bình trên các lớp có union lớn hơn 0. Dice là chỉ số đánh giá; hàm loss huấn luyện là Cross-Entropy.</p>
-      <div class="links"><a class="btn secondary" href="A2/results/test_metrics_verified.txt">Kết quả kiểm chứng checkpoint</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A2/verify_checkpoint.py">Script đánh giá toàn bộ tập test</a></div>
-      <p>Kết quả cho thấy pipeline đã huấn luyện và đánh giá thành công. Đây là baseline để tiếp tục so sánh với UNet++ trong A2.</p>
-    </section>
-    <section class="panel" id="evidence">
-      <h2>5. Hình minh chứng thực nghiệm</h2>
-      <div class="gallery">
-        <figure class="figure"><img src="A2/results/camvid_sample.png" alt="Ảnh CamVid và mask nhãn thực" loading="lazy"><figcaption>Hình 1. Ảnh mẫu CamVid và nhãn phân đoạn.</figcaption></figure>
-        <figure class="figure"><img src="A2/results/training_curves.png" alt="Biểu đồ huấn luyện U-Net" loading="lazy"><figcaption>Hình 2. Biểu đồ huấn luyện U-Net.</figcaption></figure>
-        <figure class="figure full"><img src="A2/results/prediction.png" alt="Kết quả dự đoán segmentation" loading="lazy"><figcaption>Hình 3. Kết quả phân đoạn dự đoán trên ảnh kiểm thử.</figcaption></figure>
-        <figure class="figure full"><img src="A2/images/train%2010%20epoch.png" alt="Nhật ký huấn luyện 10 epochs" loading="lazy"><figcaption>Hình 4. Nhật ký huấn luyện 10 epochs trên GPU.</figcaption></figure>
-      </div>
-      <div class="note">Hình ảnh được lấy từ kết quả thực nghiệm trong repository. Nếu hình không hiển thị, hãy kiểm tra đúng tên file (phân biệt chữ hoa/chữ thường) và đường dẫn trong thư mục <code>A2/results/</code> hoặc <code>A2/images/</code>.</div>
-    </section>
-    <section class="panel" id="resources">
-      <h2>6. Mã nguồn, báo cáo và tài liệu</h2>
-      <div class="links"><a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2" target="_blank" rel="noopener noreferrer">Mã nguồn Python</a><a class="btn secondary" href="reports/B%C3%A1o%20c%C3%A1o%20B%C3%B9i%20Ti%E1%BA%BFn%20%C4%90%E1%BB%A9c%20MSSV%202680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo PDF</a><a class="btn secondary" href="https://github.com/stonewst/CamVid-for-Segmentation" target="_blank" rel="noopener noreferrer">Nguồn CamVid</a></div>
-      <h3>Định hướng A2</h3><p>So sánh U-Net và UNet++ cho bài toán phân đoạn ngữ nghĩa ảnh giao thông đô thị. UNet++ được đề xuất trong lĩnh vực ảnh y sinh; nghiên cứu dự kiến đánh giá khả năng áp dụng kiến trúc này trên CamVid.</p>
-    </section>
-
-    <section class="panel" id="a1">
-      <h2>A1.1 — CNN vs Vision Transformer trên PathMNIST</h2>
-      <p><strong>Bùi Tiến Đức · MSSV 2680018</strong></p>
-      <p>So sánh ResNet-18 và ViT-Base/16 trong phân loại ảnh mô bệnh học; đánh giá ảnh hưởng của pretrained và chiến lược đóng băng backbone.</p>
-      <div class="note"><strong>Trạng thái:</strong> Đã chuẩn bị dữ liệu, thực hiện EDA và kiểm tra pipeline. A1.2 đã hoàn thành ResNet-18 head và partial, mỗi cấu hình 10 epochs, và đánh giá trên 7.180 ảnh test. ViT mới kiểm tra pipeline; scratch và full chưa thực hiện. <a href="#a1-2">Xem kết quả A1.2</a>.</div>
-      <h3>1. Dataset và EDA</h3>
-      <p>PathMNIST gồm 107.180 ảnh RGB thuộc 9 lớp. Giữ nguyên split được cung cấp. Ảnh lưu trữ 28 × 28 được resize lên 224 × 224 khi đưa vào mô hình.</p>
-      <table><caption>Số lượng ảnh theo tập</caption><thead><tr><th scope="col">Tập</th><th scope="col">Số ảnh</th></tr></thead><tbody><tr><td>Train</td><td>89.996</td></tr><tr><td>Validation</td><td>10.004</td></tr><tr><td>Test</td><td>7.180</td></tr><tr><th scope="row">Tổng</th><td>107.180</td></tr></tbody></table>
-      <p><a href="https://medmnist.com/" target="_blank" rel="noopener noreferrer">Nguồn MedMNIST</a> · License dữ liệu: CC BY 4.0.</p>
-      <p class="muted">Dataset có 9 lớp, thấp hơn mức ưu tiên ≥ 10 lớp của đề; lựa chọn gắn với paper tái lập và quy mô dữ liệu lớn. Resize không bổ sung chi tiết ảnh mới.</p>
-      <div class="gallery">
-        <figure class="figure"><img src="A1/results/sample_images.png" alt="Ảnh train đại diện cho 9 lớp PathMNIST" loading="lazy"><figcaption>Ảnh train đại diện cho từng lớp.</figcaption></figure>
-        <figure class="figure"><img src="A1/results/train_class_distribution.png" alt="Phân bố số ảnh train theo lớp PathMNIST" loading="lazy"><figcaption>Phân bố lớp trên tập train.</figcaption></figure>
-      </div>
-      <h3>2. Paper nền và phạm vi</h3>
-      <p>Halder, A., Gharami, S., Sadhu, P., Singh, P. K., Woźniak, M., &amp; Ijaz, M. F. (2024). <em>Implementing vision transformer for classifying 2D biomedical images.</em> Scientific Reports, 14, 12567. <a href="https://doi.org/10.1038/s41598-024-63094-9" target="_blank" rel="noopener noreferrer">DOI và bài xuất bản</a>.</p>
-      <p>Dự kiến tái lập nhánh ViT trên PathMNIST, bổ sung CNN và các chế độ huấn luyện theo yêu cầu A1. Đây là tái lập có giới hạn và mở rộng, chưa phải tái lập toàn bộ paper. <a href="https://github.com/arindam369/MedMNIST-ViT" target="_blank" rel="noopener noreferrer">Code tác giả</a>.</p>
-      <h3>3. Protocol dự kiến</h3>
-      <table><tbody>
-        <tr><th scope="row">Mô hình</th><td>ResNet-18 (CNN) và ViT-Base/16 (Transformer)</td></tr>
-        <tr><th scope="row">Đầu vào / batch</th><td>224 × 224 RGB / batch size 2</td></tr>
-        <tr><th scope="row">Ngân sách</th><td>Dự kiến 10 epochs mỗi cấu hình, chạy lần lượt; chưa khẳng định đủ hội tụ</td></tr>
-        <tr><th scope="row">Optimizer / loss</th><td>AdamW / CrossEntropyLoss</td></tr>
-        <tr><th scope="row">Learning rate</th><td>Scratch: 1e-4; head-only: 1e-3; partial/full: 1e-5</td></tr>
-        <tr><th scope="row">Seed dự kiến</th><td>42</td></tr>
-        <tr><th scope="row">Tiền xử lý</th><td>Train: resize và lật ngang ngẫu nhiên; validation/test: resize, không augmentation ngẫu nhiên. Normalization theo checkpoint từng mô hình, dùng nhất quán cho bản scratch tương ứng; xác nhận trước thí nghiệm chính.</td></tr>
-        <tr><th scope="row">Precision</th><td>Mixed precision khi chạy GPU</td></tr>
-        <tr><th scope="row">Chọn checkpoint</th><td>Validation Macro-F1 cao nhất; không dùng test để chọn cấu hình</td></tr>
-        <tr><th scope="row">Đánh giá</th><td>Accuracy, Macro-F1, confusion matrix, thời gian, VRAM, số tham số tổng và trainable</td></tr>
-      </tbody></table>
-      <div class="table-wrap"><table><caption>Các thí nghiệm dự kiến, chưa phải kết quả đã chạy</caption><thead><tr><th scope="col">Chế độ</th><th scope="col">ResNet-18</th><th scope="col">ViT-Base/16</th></tr></thead><tbody>
-        <tr><td>From-scratch</td><td>Khởi tạo ngẫu nhiên, train toàn bộ</td><td>Khởi tạo ngẫu nhiên, train toàn bộ</td></tr>
-        <tr><td>Pretrained: head-only</td><td>Chỉ train fc</td><td>Chỉ train classifier</td></tr>
-        <tr><td>Pretrained: partial</td><td>Train layer4 và fc</td><td>Train 2 encoder block cuối, layernorm cuối và classifier</td></tr>
-        <tr><td>Pretrained: full</td><td>Fine-tune toàn bộ</td><td>Fine-tune toàn bộ</td></tr>
-      </tbody></table></div>
-      <p><a href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/PROTOCOL.md">Protocol chi tiết và preprocessing dự kiến</a></p>
-      <h3>4. Minh chứng kiểm tra pipeline</h3>
-      <p>Môi trường đã kiểm tra: Python 3.11, PyTorch 2.11.0+cu128, Transformers 4.57.6; GPU NVIDIA GeForce RTX 3050 Ti Laptop GPU. ViT đã chạy thử 20 batch train và 10 batch validation với batch size 2; VRAM đỉnh PyTorch cấp phát khoảng 1,62 GB.</p>
-      <p class="muted">Phép thử chỉ xác nhận pipeline hoạt động. Loss/accuracy trên tập nhỏ không dùng làm kết quả cuối hay so sánh với paper. Phần YOLO Detection là thực hành riêng; <a href="#detection">xem kết quả fine-tune trên Penn-Fudan</a>.</p>
-      <div class="links">
-        <a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A1" target="_blank" rel="noopener noreferrer">Mã nguồn A1</a>
-        <a class="btn secondary" href="A1/results/class_distribution.csv">Thống kê dữ liệu</a>
-        <a class="btn secondary" href="A1/results/vit_pipeline_check.json">Minh chứng pipeline</a>
-      </div>
-      <p><a class="btn secondary"
-        href="reports/A1_1_Bui_Tien_Duc_2680018.pdf"
-        target="_blank" rel="noopener noreferrer">Báo cáo PDF A1.1</a></p>
-    </section>
-
-  
-
-    <section class="panel" id="a1-2" aria-labelledby="a1-2-title">
-      <h2 id="a1-2-title">A1.2 — ResNet-18 head và partial trên PathMNIST</h2>
-      <p>Đã hoàn thành hai cấu hình pretrained, mỗi cấu hình 10 epochs, seed 42. Mỗi checkpoint được chọn theo validation Macro-F1 cao nhất (hòa thì chọn validation loss thấp hơn), sau đó đánh giá trên toàn bộ 7.180 ảnh test.</p>
-      <p class="note"><strong>Phạm vi đã thực hiện:</strong> ResNet-18 head và partial. ViT mới kiểm tra pipeline; các cấu hình ViT, scratch và full chưa có thực nghiệm chính thức. Chưa hoàn thành toàn bộ kế hoạch tám cấu hình và chưa có kết luận so sánh CNN–ViT.</p>
-      <h3>Cấu hình và kết quả</h3>
-      <p>Ảnh RGB 28 × 28 được resize bilinear thành 224 × 224, chuẩn hóa theo ImageNet. Train có lật ngang ngẫu nhiên p = 0,5; validation/test không augmentation ngẫu nhiên. Batch size 2, AdamW, weight decay 0,01, CrossEntropyLoss, mixed precision trên GPU. Head chỉ huấn luyện fc; partial huấn luyện layer4 và fc.</p>
-      <div class="table-wrap"><table>
-        <caption>So sánh hai cấu hình trên cùng split PathMNIST; Accuracy và Macro-F1 tính theo phần trăm</caption>
-        <thead><tr><th scope="col">Chỉ số</th><th scope="col">Head</th><th scope="col">Partial</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Epochs hoàn thành</th><td>10</td><td>10</td></tr>
-          <tr><th scope="row">Learning rate</th><td>0,001</td><td>0,00001</td></tr>
-          <tr><th scope="row">Tham số được huấn luyện</th><td>4.617</td><td>8.398.345</td></tr>
-          <tr><th scope="row">Best epoch theo validation</th><td>6</td><td>7</td></tr>
-          <tr><th scope="row">Validation Macro-F1 tốt nhất</th><td>87,22%</td><td>94,06%</td></tr>
-          <tr><th scope="row">Test Accuracy</th><td>82,77%</td><td>86,00%</td></tr>
-          <tr><th scope="row">Test Macro-F1</th><td>76,20%</td><td>80,04%</td></tr>
-          <tr><th scope="row">Test loss</th><td>0,4933</td><td>0,6871</td></tr>
-          <tr><th scope="row">Train + validation (phút)</th><td>80,53</td><td>167,26</td></tr>
-          <tr><th scope="row">VRAM tensor đỉnh PyTorch (GiB)</th><td>0,1169</td><td>0,2323</td></tr>
-        </tbody>
-      </table></div>
-      <p>Partial tăng khoảng 3,23 điểm phần trăm test Accuracy và 3,85 điểm phần trăm test Macro-F1, với thời gian train + validation khoảng 2,08 lần. Learning rate cũng khác nhau, nên kết quả không tách riêng tác động của việc mở thêm layer4. Mỗi cấu hình chỉ chạy một seed, chưa có kiểm định ý nghĩa thống kê.</p>
-      <p>Validation Macro-F1 cao hơn test khoảng 11,02 điểm ở head và 14,02 điểm ở partial; chưa xác định nguyên nhân từ thí nghiệm hiện có. Partial có test loss cao hơn dù Accuracy/F1 tốt hơn; ảnh minh họa có dự đoán sai với confidence cao, nhưng chưa đánh giá calibration chính thức.</p>
-      <p class="muted">VRAM là đỉnh bộ nhớ tensor do PyTorch cấp phát trong lần train, không phải tổng bộ nhớ GPU. Thời gian gồm train và validation, không bao gồm toàn bộ chi phí khởi tạo và lưu file. Resize không bổ sung chi tiết mới cho ảnh gốc.</p>
-      <h3>Biểu đồ và minh chứng test</h3>
-      <div class="gallery">
-        <figure class="figure"><img src="A1/results/a1_2/evaluation_final/head/training_curves.png" alt="ResNet-18 Head: Loss và Macro-F1 theo epoch" loading="lazy"><figcaption>ResNet-18 Head: Loss và Macro-F1 theo epoch.</figcaption></figure>
-        <figure class="figure"><img src="A1/results/a1_2/evaluation_final/head/confusion_matrix.png" alt="ResNet-18 Head: Confusion matrix trên 7.180 ảnh test" loading="lazy"><figcaption>ResNet-18 Head: Confusion matrix trên 7.180 ảnh test.</figcaption></figure>
-        <figure class="figure full"><img src="A1/results/a1_2/evaluation_final/head/sample_predictions.png" alt="ResNet-18 Head: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test" loading="lazy"><figcaption>ResNet-18 Head: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test.</figcaption></figure>
-        <figure class="figure"><img src="A1/results/a1_2/evaluation_final/partial/training_curves.png" alt="ResNet-18 Partial: Loss và Macro-F1 theo epoch" loading="lazy"><figcaption>ResNet-18 Partial: Loss và Macro-F1 theo epoch.</figcaption></figure>
-        <figure class="figure"><img src="A1/results/a1_2/evaluation_final/partial/confusion_matrix.png" alt="ResNet-18 Partial: Confusion matrix trên 7.180 ảnh test" loading="lazy"><figcaption>ResNet-18 Partial: Confusion matrix trên 7.180 ảnh test.</figcaption></figure>
-        <figure class="figure full"><img src="A1/results/a1_2/evaluation_final/partial/sample_predictions.png" alt="ResNet-18 Partial: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test" loading="lazy"><figcaption>ResNet-18 Partial: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test.</figcaption></figure>
-      </div>
-      <p>Với partial, các lớp có test F1 thấp gồm Debris (49,45%), Cancer-associated stroma (51,46%) và Smooth muscle (61,23%). Ví dụ test index 19 có nhãn thật Smooth muscle (5), dự đoán Cancer-associated stroma (7), confidence 0,989. Confidence không bảo đảm dự đoán đúng.</p>
-
-      <h3>Checkpoint đã huấn luyện</h3>
-      <div class="links">
-        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_head_best.pt">Tải ResNet-18 head (best.pt)</a>
-        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_partial_best.pt">Tải ResNet-18 partial (best.pt)</a>
-        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-2-resnet18-v1" target="_blank" rel="noopener noreferrer">Release và thông tin checkpoint</a>
-      </div>
-      <p class="muted">Head: epoch 6; partial: epoch 7. Để chạy script đánh giá, đặt mỗi file tải về thành best.pt trong thư mục run tương ứng; xem hướng dẫn trong A1/README.md. Không cần huấn luyện lại.</p>
-      <h3>Báo cáo và dữ liệu kiểm chứng</h3>
-      <div class="links">
-        <a class="btn secondary" href="reports/A1_2_Bui_Tien_Duc_2680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo PDF A1.2</a>
-        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/reports/A1_2_Bui_Tien_Duc_2680018.docx" target="_blank" rel="noopener noreferrer">Báo cáo Word A1.2</a>
-        <a class="btn" href="A1/results/a1_2/evaluation_final/A1_2_report.html" target="_blank" rel="noopener noreferrer">Báo cáo A1.2 và hình thực nghiệm</a>
-        <a class="btn secondary" href="A1/results/a1_2/evaluation_final/comparison.csv">Bảng so sánh CSV</a>
-        <a class="btn secondary" href="A1/results/a1_2/evaluation_final/head/test_metrics.json">Test metrics head</a>
-        <a class="btn secondary" href="A1/results/a1_2/evaluation_final/partial/test_metrics.json">Test metrics partial</a>
-        <a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/finish_a1_2.py">Script đánh giá</a>
-      </div>
-      <p class="muted">Báo cáo Word/PDF A1.2 đã được công bố trong thư mục reports. SHA256 của từng checkpoint được lưu trong test_metrics.json. Hai checkpoint đã được công bố trên GitHub Releases; SHA256 do GitHub cung cấp khớp với test_metrics.json.</p>
-    </section>
-
+<header>
+<div class="eyebrow">CO5085 · Deep Learning and Its Applications in Computer Vision</div>
+<h1>CO5085 — Bài tập lớn và thực hành thị giác máy tính</h1>
+<p>A1: CNN–ViT trên PathMNIST · Thực hành phân đoạn: U-Net trên CamVid</p>
+<p>Bài thực hành Segmentation · 19/10/2026</p>
+<p>Bùi Tiến Đức · MSSV 2680018</p>
+</header>
+<nav aria-label="Điều hướng trang">
+<div class="inner">
+<a href="#a1">A1.1 — Dữ liệu &amp; protocol</a>
+<a href="#a1-2">A1.2 — Kết quả test</a>
+<a href="#detection">Detection 26/10</a><a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn &amp; báo cáo</a>
+</div>
+</nav>
+<main>
+<section class="panel" id="overview">
+<h2>1. Giới thiệu đề tài</h2>
+<p>Semantic Segmentation là bài toán gán nhãn ngữ nghĩa cho từng pixel của ảnh. Bài thực hành này xây dựng một pipeline gồm đọc ảnh và mask, tiền xử lý, huấn luyện mô hình U-Net, đánh giá bằng mIoU/Dice và trực quan hóa kết quả dự đoán.</p>
+<p>Mục tiêu là xác định các vùng như đường, xe, người đi bộ, tòa nhà và bầu trời trong ảnh giao thông đô thị.</p>
+</section>
+<section class="panel" id="dataset">
+<h2>2. Bộ dữ liệu CamVid</h2>
+<p>Bộ dữ liệu sử dụng 701 ảnh với 11 lớp có nhãn; các pixel <code>unlabeled</code> được bỏ qua khi tính loss và metrics bằng <code>ignore_index=255</code>.</p>
+<table><thead><tr><th>Tập</th><th>Số ảnh</th></tr></thead><tbody><tr><td>Training</td><td>367</td></tr><tr><td>Validation</td><td>101</td></tr><tr><td>Testing</td><td>233</td></tr><tr><th>Tổng</th><th>701</th></tr></tbody></table>
+<p class="muted">Các lớp: Sky, Building, Pole, Road, Sidewalk, Tree, SignSymbol, Fence, Car, Pedestrian, Bicyclist.</p>
+</section>
+<section class="panel" id="method">
+<h2>3. Phương pháp và môi trường thực nghiệm</h2>
+<p>Mô hình U-Net gồm encoder, bottleneck và decoder; skip connections giúp kết hợp đặc trưng ở nhiều mức độ phân giải.</p>
+<table><tbody><tr><th>Mô hình</th><td>U-Net</td></tr><tr><th>Framework</th><td>PyTorch</td></tr><tr><th>GPU</th><td>NVIDIA GeForce RTX 3050 Ti Laptop GPU (4 GB)</td></tr><tr><th>Kích thước ảnh</th><td>256 × 256</td></tr><tr><th>Batch size</th><td>2</td></tr><tr><th>Epochs</th><td>10</td></tr><tr><th>Optimizer</th><td>AdamW</td></tr><tr><th>Learning rate</th><td>0.001</td></tr><tr><th>Base channels</th><td>16</td></tr><tr><th>Tiền xử lý</th><td>Ảnh RGB về [0, 1]; resize ảnh bằng bilinear, mask bằng nearest; chưa dùng augmentation</td></tr><tr><th>Loss</th><td>Cross-Entropy Loss (ignore index 255)</td></tr><tr><th>Metrics</th><td>mIoU, Mean Dice</td></tr></tbody></table>
+</section>
+<section class="panel" id="results">
+<h2>4. Kết quả thực nghiệm</h2>
+<p class="muted">Kết quả baseline U-Net sau 10 epochs. Checkpoint được chọn theo validation mIoU cao nhất và đã được đánh giá lại trên toàn bộ 233 ảnh test; số liệu dưới đây được làm tròn đến 4 chữ số thập phân.</p>
+<div class="metrics"><div class="metric"><strong>0.4434</strong><span>Best Validation mIoU (epoch 9)</span></div><div class="metric"><strong>0.3806</strong><span>Test mIoU</span></div><div class="metric"><strong>0.4469</strong><span>Test Mean Dice</span></div><div class="metric"><strong>0.5489</strong><span>Test Loss</span></div></div>
+<p class="muted">Metrics được tính từ confusion matrix cộng dồn trên toàn bộ tập test, bỏ qua pixel nhãn 255 và lấy trung bình trên các lớp có union lớn hơn 0. Dice là chỉ số đánh giá; hàm loss huấn luyện là Cross-Entropy.</p>
+<div class="links"><a class="btn secondary" href="A2/results/test_metrics_verified.txt">Kết quả kiểm chứng checkpoint</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A2/verify_checkpoint.py">Script đánh giá toàn bộ tập test</a></div>
+<p>Kết quả cho thấy pipeline đã huấn luyện và đánh giá thành công. Đây là baseline để tiếp tục so sánh với UNet++ trong A2.</p>
+</section>
+<section class="panel" id="evidence">
+<h2>5. Hình minh chứng thực nghiệm</h2>
+<div class="gallery">
+<figure class="figure"><img alt="Ảnh CamVid và mask nhãn thực" loading="lazy" src="A2/results/camvid_sample.png"/><figcaption>Hình 1. Ảnh mẫu CamVid và nhãn phân đoạn.</figcaption></figure>
+<figure class="figure"><img alt="Biểu đồ huấn luyện U-Net" loading="lazy" src="A2/results/training_curves.png"/><figcaption>Hình 2. Biểu đồ huấn luyện U-Net.</figcaption></figure>
+<figure class="figure full"><img alt="Kết quả dự đoán segmentation" loading="lazy" src="A2/results/prediction.png"/><figcaption>Hình 3. Kết quả phân đoạn dự đoán trên ảnh kiểm thử.</figcaption></figure>
+<figure class="figure full"><img alt="Nhật ký huấn luyện 10 epochs" loading="lazy" src="A2/images/train%2010%20epoch.png"/><figcaption>Hình 4. Nhật ký huấn luyện 10 epochs trên GPU.</figcaption></figure>
+</div>
+<div class="note">Hình ảnh được lấy từ kết quả thực nghiệm trong repository. Nếu hình không hiển thị, hãy kiểm tra đúng tên file (phân biệt chữ hoa/chữ thường) và đường dẫn trong thư mục <code>A2/results/</code> hoặc <code>A2/images/</code>.</div>
+</section>
+<section class="panel" id="resources">
+<h2>6. Mã nguồn, báo cáo và tài liệu</h2>
+<div class="links"><a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2" rel="noopener noreferrer" target="_blank">Mã nguồn Python</a><a class="btn secondary" href="reports/B%C3%A1o%20c%C3%A1o%20B%C3%B9i%20Ti%E1%BA%BFn%20%C4%90%E1%BB%A9c%20MSSV%202680018.pdf" rel="noopener noreferrer" target="_blank">Báo cáo PDF</a><a class="btn secondary" href="https://github.com/stonewst/CamVid-for-Segmentation" rel="noopener noreferrer" target="_blank">Nguồn CamVid</a></div>
+<h3>Định hướng A2</h3><p>So sánh U-Net và UNet++ cho bài toán phân đoạn ngữ nghĩa ảnh giao thông đô thị. UNet++ được đề xuất trong lĩnh vực ảnh y sinh; nghiên cứu dự kiến đánh giá khả năng áp dụng kiến trúc này trên CamVid.</p>
+</section>
+<section class="panel" id="a1">
+<h2>A1.1 — CNN vs Vision Transformer trên PathMNIST</h2>
+<p><strong>Bùi Tiến Đức · MSSV 2680018</strong></p>
+<p>So sánh ResNet-18 và ViT-Base/16 trong phân loại ảnh mô bệnh học; đánh giá ảnh hưởng của pretrained và chiến lược đóng băng backbone.</p>
+<div class="note">A1.1 đã chuẩn bị dữ liệu và kiểm tra pipeline. A1.2 đã train/test ResNet-18 head, ResNet-18 partial và ViT head, mỗi cấu hình 10 epochs. Scratch, full và ViT partial chưa thực hiện. <a href="#a1-2">Xem kết quả CNN–ViT</a></div>
+<h3>1. Dataset và EDA</h3>
+<p>PathMNIST gồm 107.180 ảnh RGB thuộc 9 lớp. Giữ nguyên split được cung cấp. Ảnh lưu trữ 28 × 28 được resize lên 224 × 224 khi đưa vào mô hình.</p>
+<table><caption>Số lượng ảnh theo tập</caption><thead><tr><th scope="col">Tập</th><th scope="col">Số ảnh</th></tr></thead><tbody><tr><td>Train</td><td>89.996</td></tr><tr><td>Validation</td><td>10.004</td></tr><tr><td>Test</td><td>7.180</td></tr><tr><th scope="row">Tổng</th><td>107.180</td></tr></tbody></table>
+<p><a href="https://medmnist.com/" rel="noopener noreferrer" target="_blank">Nguồn MedMNIST</a> · License dữ liệu: CC BY 4.0.</p>
+<p class="muted">Dataset có 9 lớp, thấp hơn mức ưu tiên ≥ 10 lớp của đề; lựa chọn gắn với paper tái lập và quy mô dữ liệu lớn. Resize không bổ sung chi tiết ảnh mới.</p>
+<div class="gallery">
+<figure class="figure"><img alt="Ảnh train đại diện cho 9 lớp PathMNIST" loading="lazy" src="A1/results/sample_images.png"/><figcaption>Ảnh train đại diện cho từng lớp.</figcaption></figure>
+<figure class="figure"><img alt="Phân bố số ảnh train theo lớp PathMNIST" loading="lazy" src="A1/results/train_class_distribution.png"/><figcaption>Phân bố lớp trên tập train.</figcaption></figure>
+</div>
+<h3>2. Paper nền và phạm vi</h3>
+<p>Halder, A., Gharami, S., Sadhu, P., Singh, P. K., Woźniak, M., &amp; Ijaz, M. F. (2024). <em>Implementing vision transformer for classifying 2D biomedical images.</em> Scientific Reports, 14, 12567. <a href="https://doi.org/10.1038/s41598-024-63094-9" rel="noopener noreferrer" target="_blank">DOI và bài xuất bản</a>.</p>
+<p>Dự kiến tái lập nhánh ViT trên PathMNIST, bổ sung CNN và các chế độ huấn luyện theo yêu cầu A1. Đây là tái lập có giới hạn và mở rộng, chưa phải tái lập toàn bộ paper. <a href="https://github.com/arindam369/MedMNIST-ViT" rel="noopener noreferrer" target="_blank">Code tác giả</a>.</p>
+<h3>3. Protocol dự kiến</h3>
+<table><tbody>
+<tr><th scope="row">Mô hình</th><td>ResNet-18 (CNN) và ViT-Base/16 (Transformer)</td></tr>
+<tr><th scope="row">Đầu vào / batch</th><td>224 × 224 RGB / batch size 2</td></tr>
+<tr><th scope="row">Ngân sách</th><td>Dự kiến 10 epochs mỗi cấu hình, chạy lần lượt; chưa khẳng định đủ hội tụ</td></tr>
+<tr><th scope="row">Optimizer / loss</th><td>AdamW / CrossEntropyLoss</td></tr>
+<tr><th scope="row">Learning rate</th><td>Scratch: 1e-4; head-only: 1e-3; partial/full: 1e-5</td></tr>
+<tr><th scope="row">Seed dự kiến</th><td>42</td></tr>
+<tr><th scope="row">Tiền xử lý</th><td>Train: resize và lật ngang ngẫu nhiên; validation/test: resize, không augmentation ngẫu nhiên. Normalization theo checkpoint từng mô hình, dùng nhất quán cho bản scratch tương ứng; xác nhận trước thí nghiệm chính.</td></tr>
+<tr><th scope="row">Precision</th><td>Mixed precision khi chạy GPU</td></tr>
+<tr><th scope="row">Chọn checkpoint</th><td>Validation Macro-F1 cao nhất; không dùng test để chọn cấu hình</td></tr>
+<tr><th scope="row">Đánh giá</th><td>Accuracy, Macro-F1, confusion matrix, thời gian, VRAM, số tham số tổng và trainable</td></tr>
+</tbody></table>
+<div class="table-wrap"><table><caption>Các thí nghiệm dự kiến, chưa phải kết quả đã chạy</caption><thead><tr><th scope="col">Chế độ</th><th scope="col">ResNet-18</th><th scope="col">ViT-Base/16</th></tr></thead><tbody>
+<tr><td>From-scratch</td><td>Khởi tạo ngẫu nhiên, train toàn bộ</td><td>Khởi tạo ngẫu nhiên, train toàn bộ</td></tr>
+<tr><td>Pretrained: head-only</td><td>Chỉ train fc</td><td>Chỉ train classifier</td></tr>
+<tr><td>Pretrained: partial</td><td>Train layer4 và fc</td><td>Train 2 encoder block cuối, layernorm cuối và classifier</td></tr>
+<tr><td>Pretrained: full</td><td>Fine-tune toàn bộ</td><td>Fine-tune toàn bộ</td></tr>
+</tbody></table></div>
+<p><a href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/PROTOCOL.md">Protocol chi tiết và preprocessing dự kiến</a></p>
+<h3>4. Minh chứng kiểm tra pipeline</h3>
+<p>Môi trường đã kiểm tra: Python 3.11, PyTorch 2.11.0+cu128, Transformers 4.57.6; GPU NVIDIA GeForce RTX 3050 Ti Laptop GPU. ViT đã chạy thử 20 batch train và 10 batch validation với batch size 2; VRAM đỉnh PyTorch cấp phát khoảng 1,62 GB.</p>
+<p class="muted">Phép thử chỉ xác nhận pipeline hoạt động. Loss/accuracy trên tập nhỏ không dùng làm kết quả cuối hay so sánh với paper. Phần YOLO Detection là thực hành riêng; <a href="#detection">xem kết quả fine-tune trên Penn-Fudan</a>.</p>
+<div class="links">
+<a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A1" rel="noopener noreferrer" target="_blank">Mã nguồn A1</a>
+<a class="btn secondary" href="A1/results/class_distribution.csv">Thống kê dữ liệu</a>
+<a class="btn secondary" href="A1/results/vit_pipeline_check.json">Minh chứng pipeline</a>
+</div>
+<p><a class="btn secondary" href="reports/A1_1_Bui_Tien_Duc_2680018.pdf" rel="noopener noreferrer" target="_blank">Báo cáo PDF A1.1</a></p>
+</section>
+<section aria-labelledby="a1-2-title" class="panel" id="a1-2">
+<h2 id="a1-2-title">A1.2 — CNN và Vision Transformer trên PathMNIST</h2>
+<p>Đã hoàn thành ResNet-18 head, ResNet-18 partial và ViT-Base/16 head, mỗi cấu hình 10 epochs, seed 42. Checkpoint chọn bằng validation Macro-F1, sau đó đánh giá trên toàn bộ 7.180 ảnh test.</p>
+<p class="note">Phạm vi: đã có so sánh CNN–Transformer giữa ResNet-18 head và ViT head; ResNet-18 partial là thực nghiệm bổ sung. Chưa thực hiện scratch, full hoặc ViT partial; chưa tái lập toàn bộ paper hay toàn bộ kế hoạch tám cấu hình.</p>
+<h3>Cấu hình và kết quả</h3>
+<p>Ảnh RGB 28 × 28 được resize bilinear 224 × 224. Train có lật ngang p = 0,5; validation/test không augmentation ngẫu nhiên. ResNet-18 dùng normalization ImageNet, ViT dùng mean/std 0,5. Batch 2, AdamW, weight decay 0,01, CrossEntropyLoss, AMP. Head chỉ cập nhật lớp phân loại; ResNet-18 partial cập nhật layer4 và fc.</p>
+<div class="table-wrap"><table><caption>Kết quả ba cấu hình trên cùng split PathMNIST</caption><thead><tr><th scope="col">Chỉ số</th><th scope="col">ResNet-18 head</th><th scope="col">ResNet-18 partial</th><th scope="col">ViT head</th></tr></thead><tbody><tr><th scope="row">Epochs</th><td>10</td><td>10</td><td>10</td></tr><tr><th scope="row">Best epoch</th><td>6</td><td>7</td><td>2</td></tr><tr><th scope="row">Learning rate</th><td>0.001</td><td>1e-05</td><td>0.001</td></tr><tr><th scope="row">Tham số trainable</th><td>4,617</td><td>8,398,345</td><td>6,921</td></tr><tr><th scope="row">Validation Macro-F1 (%)</th><td>87.22%</td><td>94.06%</td><td>94.09%</td></tr><tr><th scope="row">Test Accuracy (%)</th><td>82.77%</td><td>86.00%</td><td>90.24%</td></tr><tr><th scope="row">Test Macro-F1 (%)</th><td>76.20%</td><td>80.04%</td><td>85.92%</td></tr><tr><th scope="row">Train + validation phút</th><td>80.53</td><td>167.26</td><td>228.51</td></tr><tr><th scope="row">VRAM tensor đỉnh GiB</th><td>0.1169</td><td>0.2323</td><td>0.4027</td></tr></tbody></table></div>
+<p>Partial tăng khoảng 3,23 điểm phần trăm test Accuracy và 3,85 điểm phần trăm test Macro-F1, với thời gian train + validation khoảng 2,08 lần. Learning rate cũng khác nhau, nên kết quả không tách riêng tác động của việc mở thêm layer4. Mỗi cấu hình chỉ chạy một seed, chưa có kiểm định ý nghĩa thống kê.</p>
+<p>Validation Macro-F1 cao hơn test khoảng 11,02 điểm ở head và 14,02 điểm ở partial; chưa xác định nguyên nhân từ thí nghiệm hiện có. Partial có test loss cao hơn dù Accuracy/F1 tốt hơn; ảnh minh họa có dự đoán sai với confidence cao, nhưng chưa đánh giá calibration chính thức.</p>
+<p class="muted">VRAM là đỉnh bộ nhớ tensor do PyTorch cấp phát trong lần train, không phải tổng bộ nhớ GPU. Thời gian gồm train và validation, không bao gồm toàn bộ chi phí khởi tạo và lưu file. Resize không bổ sung chi tiết mới cho ảnh gốc.</p>
+<p>ViT head đạt test Accuracy 90,24% và Macro-F1 85,92%, cao hơn ResNet-18 head lần lượt 7,47 và 9,72 điểm phần trăm; thời gian train + validation khoảng 2,84 lần. Đây là so sánh các backbone pretrained cụ thể, với normalization và nguồn pretraining khác nhau; một seed chưa chứng minh Transformer luôn tốt hơn CNN.</p><h3>Biểu đồ và minh chứng test</h3>
+<div class="gallery">
+<figure class="figure"><img alt="ResNet-18 Head: Loss và Macro-F1 theo epoch" loading="lazy" src="A1/results/a1_2/evaluation_final/head/training_curves.png"/><figcaption>ResNet-18 Head: Loss và Macro-F1 theo epoch.</figcaption></figure>
+<figure class="figure"><img alt="ResNet-18 Head: Confusion matrix trên 7.180 ảnh test" loading="lazy" src="A1/results/a1_2/evaluation_final/head/confusion_matrix.png"/><figcaption>ResNet-18 Head: Confusion matrix trên 7.180 ảnh test.</figcaption></figure>
+<figure class="figure full"><img alt="ResNet-18 Head: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test" loading="lazy" src="A1/results/a1_2/evaluation_final/head/sample_predictions.png"/><figcaption>ResNet-18 Head: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test.</figcaption></figure>
+<figure class="figure"><img alt="ResNet-18 Partial: Loss và Macro-F1 theo epoch" loading="lazy" src="A1/results/a1_2/evaluation_final/partial/training_curves.png"/><figcaption>ResNet-18 Partial: Loss và Macro-F1 theo epoch.</figcaption></figure>
+<figure class="figure"><img alt="ResNet-18 Partial: Confusion matrix trên 7.180 ảnh test" loading="lazy" src="A1/results/a1_2/evaluation_final/partial/confusion_matrix.png"/><figcaption>ResNet-18 Partial: Confusion matrix trên 7.180 ảnh test.</figcaption></figure>
+<figure class="figure full"><img alt="ResNet-18 Partial: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test" loading="lazy" src="A1/results/a1_2/evaluation_final/partial/sample_predictions.png"/><figcaption>ResNet-18 Partial: Bốn dự đoán đúng và sai đầu tiên theo thứ tự test.</figcaption></figure>
+<figure class="figure full"><img alt="ViT head: loss và Macro-F1 theo epoch, best epoch 2." loading="lazy" src="A1/results/a1_2/evaluation_cnn_vit/vit_head/training_curves.png"/><figcaption>ViT head: loss và Macro-F1 theo epoch, best epoch 2.</figcaption></figure><figure class="figure full"><img alt="ViT head: confusion matrix trên 7.180 ảnh test." loading="lazy" src="A1/results/a1_2/evaluation_cnn_vit/vit_head/confusion_matrix.png"/><figcaption>ViT head: confusion matrix trên 7.180 ảnh test.</figcaption></figure><figure class="figure full"><img alt="ViT head: các ví dụ đúng và sai đầu tiên theo thứ tự test." loading="lazy" src="A1/results/a1_2/evaluation_cnn_vit/vit_head/sample_predictions.png"/><figcaption>ViT head: các ví dụ đúng và sai đầu tiên theo thứ tự test.</figcaption></figure></div><p>ViT còn nhầm 130 ảnh Cancer-associated stroma thành Smooth muscle. F1 stroma là 56,56%, Debris 72,21% và Smooth muscle 77,41%. Chênh lệch validation–test Macro-F1 của ViT khoảng 8,17 điểm phần trăm; chưa xác định nguyên nhân riêng lẻ.</p>
+<p>Với partial, các lớp có test F1 thấp gồm Debris (49,45%), Cancer-associated stroma (51,46%) và Smooth muscle (61,23%). Ví dụ test index 19 có nhãn thật Smooth muscle (5), dự đoán Cancer-associated stroma (7), confidence 0,989. Confidence không bảo đảm dự đoán đúng.</p>
+<h3>Checkpoint đã huấn luyện</h3>
+<div class="links">
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_head_best.pt">Tải ResNet-18 head (best.pt)</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-resnet18-v1/resnet18_partial_best.pt">Tải ResNet-18 partial (best.pt)</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-2-resnet18-v1" rel="noopener noreferrer" target="_blank">Release và thông tin checkpoint</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-2-cnn-vit-v2/vit_head_best.pt">Tải ViT head best.pt</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-2-cnn-vit-v2" rel="noopener noreferrer" target="_blank">Release CNN–ViT v2</a></div>
+<p class="muted">ResNet-18 head: epoch 6; partial: epoch 7; ViT head: epoch 2. Đặt checkpoint tải về thành best.pt trong thư mục run tương ứng; xem A1/README.md để đánh giá lại, không cần train.</p>
+<h3>Báo cáo và dữ liệu kiểm chứng</h3>
+<div class="links">
+<a class="btn secondary" href="reports/A1_2_Bui_Tien_Duc_2680018.pdf" rel="noopener noreferrer" target="_blank">Báo cáo PDF A1.2</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/reports/A1_2_Bui_Tien_Duc_2680018.docx" rel="noopener noreferrer" target="_blank">Báo cáo Word A1.2</a>
+<a class="btn" href="A1/results/a1_2/evaluation_cnn_vit/CNN_ViT_report.html" rel="noopener noreferrer" target="_blank">Báo cáo HTML CNN–ViT</a>
+<a class="btn secondary" href="A1/results/a1_2/evaluation_cnn_vit/comparison_cnn_vit.csv">Bảng so sánh CSV</a>
+<a class="btn secondary" href="A1/results/a1_2/evaluation_final/head/test_metrics.json">Test metrics head</a>
+<a class="btn secondary" href="A1/results/a1_2/evaluation_final/partial/test_metrics.json">Test metrics partial</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/finish_a1_2.py">Script đánh giá CNN</a>
+<a class="btn secondary" href="A1/results/a1_2/evaluation_cnn_vit/vit_head/test_metrics.json">Test metrics ViT</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A1/evaluate_vit_head.py">Script đánh giá ViT</a></div>
+<p class="muted">Báo cáo Word/PDF đã cập nhật kết quả CNN–ViT. Ba checkpoint đã công bố trên hai GitHub Releases; SHA256 do GitHub cung cấp khớp các file test_metrics.json tương ứng.</p>
+</section>
 <section class="panel" id="detection">
 <h2>Detection — YOLO11n trên Penn-Fudan</h2>
 <p>Bài thực hành 26/10/2026: fine-tune detector một lớp person. Đã huấn luyện 30 epochs, ảnh 416, batch 2, AdamW, learning rate ban đầu 0,001; seed 42.</p>
@@ -189,19 +167,14 @@
 <tr><td>Validation best.pt</td><td>0,925</td><td>0,970</td><td>0,980</td><td>0,826</td></tr>
 <tr><td>Test</td><td>0,892</td><td>0,894</td><td>0,942</td><td>0,736</td></tr></tbody></table>
 <div class="gallery">
-<figure class="figure full"><img src="Detection/results/training_curves.png" alt="Loss và metrics YOLO11n qua 30 epochs" loading="lazy"><figcaption>Quá trình huấn luyện; learning rate có warmup và giảm dần.</figcaption></figure>
-<figure class="figure"><img src="Detection/results/test/BoxPR_curve.png" alt="Đường precision recall trên test" loading="lazy"><figcaption>PR curve test, AP@0.5 bằng 0,942.</figcaption></figure>
-<figure class="figure"><img src="Detection/results/predictions/FudanPed00036.jpg" alt="Dự đoán người đi bộ tại cửa tòa nhà" loading="lazy"><figcaption>Ảnh dự đoán với ngưỡng hiển thị confidence 0,25.</figcaption></figure>
+<figure class="figure full"><img alt="Loss và metrics YOLO11n qua 30 epochs" loading="lazy" src="Detection/results/training_curves.png"/><figcaption>Quá trình huấn luyện; learning rate có warmup và giảm dần.</figcaption></figure>
+<figure class="figure"><img alt="Đường precision recall trên test" loading="lazy" src="Detection/results/test/BoxPR_curve.png"/><figcaption>PR curve test, AP@0.5 bằng 0,942.</figcaption></figure>
+<figure class="figure"><img alt="Dự đoán người đi bộ tại cửa tòa nhà" loading="lazy" src="Detection/results/predictions/FudanPed00036.jpg"/><figcaption>Ảnh dự đoán với ngưỡng hiển thị confidence 0,25.</figcaption></figure>
 </div>
 <p class="note">Split ngẫu nhiên theo ảnh, chưa kiểm tra đầy đủ cảnh/người gần giống giữa các tập. Kết quả chưa chứng minh tổng quát hóa ngoài dataset. Chưa thực hiện ReID. Ngưỡng dùng vẽ confusion matrix cần được đối chiếu riêng với P/R tổng hợp.</p>
-<div class="links"><a class="btn" href="reports/Detection_Bui_Tien_Duc_2680018.pdf" target="_blank" rel="noopener noreferrer">Báo cáo Detection PDF</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/Detection">Code và hướng dẫn</a><a class="btn secondary" href="Detection/results/test_evaluation.txt">Log đánh giá test</a></div>
+<div class="links"><a class="btn" href="reports/Detection_Bui_Tien_Duc_2680018.pdf" rel="noopener noreferrer" target="_blank">Báo cáo Detection PDF</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/Detection">Code và hướng dẫn</a><a class="btn secondary" href="Detection/results/test_evaluation.txt">Log đánh giá test</a></div>
 </section>
-
 </main>
-  <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
+<footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
-
-
-
-
