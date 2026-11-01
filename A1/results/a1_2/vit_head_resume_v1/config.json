@@ -1,0 +1,44 @@
+{
+  "model": "vit",
+  "mode": "head",
+  "purpose": "full_train_validation",
+  "epochs": 10,
+  "batch_size": 2,
+  "seed": 42,
+  "lr": 0.001,
+  "optimizer": "AdamW",
+  "weight_decay": 0.01,
+  "scheduler": "constant",
+  "mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "resize": "224x224 bilinear",
+  "augmentation": "train horizontal flip p=0.5; validation none",
+  "pretraining": "google/vit-base-patch16-224",
+  "selection": "validation macro_f1 highest; tie validation loss lowest",
+  "dataset_md5": "a8b06965200029087d5bd730944a56c1",
+  "train_size": 89996,
+  "val_size": 10004,
+  "parameters_total": 85805577,
+  "parameters_trainable": 6921,
+  "trainable_names": [
+    "classifier.weight",
+    "classifier.bias"
+  ],
+  "torch": "2.11.0+cu128",
+  "torchvision": "0.26.0+cu128",
+  "transformers": "4.57.6",
+  "python": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+  "gpu": "NVIDIA GeForce RTX 3050 Ti Laptop GPU",
+  "device": "cuda:0",
+  "amp": true,
+  "workers": 0,
+  "determinism": "requested; unsupported ops warn, not bitwise guaranteed"
+}

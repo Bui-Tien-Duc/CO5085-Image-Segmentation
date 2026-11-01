@@ -1,0 +1,9 @@
+{
+  "status": "completed",
+  "training_performed": false,
+  "test_samples_per_model": 7180,
+  "models_evaluated": [
+    "vit_head"
+  ],
+  "cnn_metrics_reused": true
+}
