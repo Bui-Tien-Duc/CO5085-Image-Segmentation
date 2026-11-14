@@ -1,41 +1,61 @@
-# E1 — Phân loại ảnh với Softmax, MLP và CNN
+# E1 — Fashion-MNIST
 
 Bùi Tiến Đức · MSSV 2680018 · CO5085
 
 ## Trạng thái
 
-Đã tạo khung thư mục và kế hoạch. Chưa có code thực nghiệm, training, checkpoint hoặc kết quả.
-Hạn nộp: **23:59 ngày 02/11/2026, GMT+7**.
+Đã hoàn thành thực nghiệm Softmax, MLP, CNN và MLP có Dropout 0,5. Mỗi cấu hình 10 epochs, seed 42; checkpoint chọn bằng validation Accuracy cao nhất, lấy epoch đầu khi hòa. Báo cáo chung E1–E3 chưa hoàn thành.
 
-## Dataset
+## Dataset và cấu hình
 
-Dự kiến Fashion-MNIST, dùng chung cho E1–E3. Chưa tải hoặc xác nhận dữ liệu trong mục này.
-Giữ split chung, seed và tiền xử lý được công bố ở [protocol](../Exercises/PROTOCOL.md).
+Fashion-MNIST grayscale 28 × 28, 10 lớp. Split 54.000 train / 6.000 validation / 10.000 test, seed 42. Normalization từ train: mean 0.2858857184540482, std 0.3529602921170978. Batch 64, Adam, LR 0.001, weight decay 0, CrossEntropyLoss trên logits. Không dùng test để chọn checkpoint.
 
-## Công việc
+## Kết quả test
 
-- [ ] Softmax trên ảnh flatten.
-- [ ] MLP trên ảnh flatten.
-- [ ] CNN cho ảnh nhỏ.
-- [ ] Tự viết training loop PyTorch, đánh giá validation/test.
-- [ ] Bảng accuracy, số tham số, đường cong và phân tích lỗi.
-- [ ] Mở rộng dự kiến: MLP có/không dropout; chọn p bằng validation.
+| Cấu hình | Tham số | Best epoch | Accuracy | Macro-F1 |
+|---|---:|---:|---:|---:|
+| Softmax | 7.850 | 9 | 84,23% | 84,14% |
+| MLP | 235.146 | 9 | 88,40% | 88,31% |
+| CNN | 206.922 | 8 | 91,28% | 91,26% |
+| MLP + Dropout 0,5 | 235.146 | 9 | 87,31% | 87,14% |
 
-## Paper dự kiến
+CNN hơn MLP 2,88 điểm phần trăm Accuracy, với ít tham số hơn. Dropout 0,5 thấp hơn MLP không Dropout 1,09 điểm trong thiết lập này. Một seed chưa đủ kết luận tổng quát.
 
-*Dropout: A Simple Way to Prevent Neural Networks from Overfitting*. JMLR, 2014.
+CNN có Shirt F1 74,83%, recall 72,10%; nhầm 106 Shirt thành T-shirt/top và 80 Coat thành Pullover. Test #23: Ankle boot bị dự đoán Sandal, confidence 0,992. Confidence cao không bảo đảm đúng.
 
-[Bản xuất bản](https://www.jmlr.org/papers/v15/srivastava14a.html). Chưa ghi đã tái lập hoặc tối ưu thành công.
-Đây là phần mở rộng bên cạnh các yêu cầu bắt buộc của bài E. Phạm vi, phương trình, code tham khảo và điều kiện sử dụng phải được xác nhận trước khi hiện thực.
+## Minh chứng
 
-## Cách chạy
+- [HTML có hình](https://bui-tien-duc.github.io/CO5085-Image-Segmentation/E1/results/evaluation_final/E1_report.html)
+- [Bảng CSV](results/evaluation_final/comparison.csv)
+- [PDF E1 tạm thời](../reports/E1_Bui_Tien_Duc_2680018.pdf)
+- [Release checkpoint](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/e1-fashionmnist-v1)
 
-Chưa có lệnh train/evaluate. Sẽ cập nhật khi code được kiểm tra. Có thể dùng môi trường A1/.venv đang hoạt động; chưa yêu cầu cài thêm thư viện.
+## Checkpoint
 
-## Báo cáo
+Các file đã công bố có SHA256 khớp test_metrics.json đã kiểm tra.
 
-Dùng **một báo cáo PDF chung** cho E1–E3, dự kiến `reports/exercises.pdf`. Hiện file chưa được tạo. Xem [khung báo cáo](../Exercises/REPORT_OUTLINE.md).
+- [softmax_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/e1-fashionmnist-v1/softmax_best.pt) → đặt thành E1/results/softmax_v1/best.pt
+- [mlp_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/e1-fashionmnist-v1/mlp_best.pt) → đặt thành E1/results/mlp_v1/best.pt
+- [cnn_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/e1-fashionmnist-v1/cnn_best.pt) → đặt thành E1/results/cnn_v1/best.pt
+- [mlp_dropout05_best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/e1-fashionmnist-v1/mlp_dropout05_best.pt) → đặt thành E1/results/mlp_dropout05_v1/best.pt
 
-## Tái lập và công bố
+Giữ config.json, history.csv và summary.json trong từng run. Không dùng last.pt thay best.pt để đánh giá.
 
-Lưu config, seed, split, log, checkpoint chọn bằng validation và kết quả test thật. Không dùng test để chọn cấu hình. Ghi nguồn code và việc sử dụng AI theo quy định đề bài; cần hiểu và bảo vệ được phần hiện thực.
+## Chạy lại từ gốc repository
+
+Chuẩn bị dữ liệu: ` .\\A1\\.venv\\Scripts\\python.exe .\\Exercises\\prepare_data.py `
+
+Đánh giá bốn checkpoint, không train:
+
+```powershell
+.\\A1\\.venv\\Scripts\\python.exe .\\E1\\evaluate_e1.py --output .\\E1\\results\\evaluation_recheck
+```
+
+Output phải là thư mục mới. Không cần chạy lại để xem kết quả đã công bố.
+
+## Paper, phạm vi và hạn chế
+
+N. Srivastava et al., “Dropout: A Simple Way to Prevent Neural Networks from Overfitting,” JMLR, 15(56), 1929–1958, 2014. [Bản xuất bản](https://www.jmlr.org/papers/v15/srivastava14a.html).
+
+Áp dụng cơ chế Dropout vào MLP Fashion-MNIST là tái hiện có giới hạn, chưa tái lập toàn bộ paper. Chưa đính kèm minh chứng chỉ mục. Chỉ một seed và p=0,5; không tối ưu theo kết quả test. Train accuracy đo ở train mode, validation ở eval mode nên không so trực tiếp khoảng cách hai chỉ số để kết luận về Dropout. AI hỗ trợ chuẩn bị/rà soát code và tài liệu; người thực hiện kiểm tra, hiểu và chịu trách nhiệm về kết quả.
+
