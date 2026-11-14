@@ -1,0 +1,36 @@
+{
+  "status": "prepared",
+  "dataset": "Fashion-MNIST",
+  "source": "https://github.com/zalandoresearch/fashion-mnist",
+  "seed": 42,
+  "split_method": "NumPy default_rng; 600 validation images per class from official training set",
+  "train_samples": 54000,
+  "val_samples": 6000,
+  "test_samples": 10000,
+  "image_shape": [
+    1,
+    28,
+    28
+  ],
+  "classes": [
+    "T-shirt/top",
+    "Trouser",
+    "Pullover",
+    "Dress",
+    "Coat",
+    "Sandal",
+    "Shirt",
+    "Sneaker",
+    "Bag",
+    "Ankle boot"
+  ],
+  "normalization": {
+    "mean": 0.2858857184540482,
+    "std": 0.3529602921170978,
+    "computed_from": "54000 training images only; pixel / 255"
+  },
+  "split_sha256": "fb9fbd556d6e05d04035db8851b5ebf1c0441424cf953e624dac0a13a706514a",
+  "python": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+  "numpy": "2.4.6",
+  "training_performed": false
+}

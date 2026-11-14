@@ -1,0 +1,11 @@
+﻿class_id,class_name,train,val,test
+0,T-shirt/top,5400,600,1000
+1,Trouser,5400,600,1000
+2,Pullover,5400,600,1000
+3,Dress,5400,600,1000
+4,Coat,5400,600,1000
+5,Sandal,5400,600,1000
+6,Shirt,5400,600,1000
+7,Sneaker,5400,600,1000
+8,Bag,5400,600,1000
+9,Ankle boot,5400,600,1000
