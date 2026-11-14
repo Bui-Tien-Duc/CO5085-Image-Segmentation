@@ -1,0 +1,16 @@
+{
+  "run": "mlp_v1",
+  "model": "mlp",
+  "dropout": 0.0,
+  "test_samples": 10000,
+  "accuracy": 0.884,
+  "macro_f1": 0.8831160545061246,
+  "loss": 0.34936457846164704,
+  "best_epoch": 9,
+  "best_val_accuracy": 0.8916666666666667,
+  "parameters": 235146,
+  "train_val_seconds": 56.727542799926596,
+  "seed": 42,
+  "checkpoint_sha256": "dcd1554f625658ea8c35b76070992050c7086d245ad18633295e200b16a2ecc4",
+  "split_sha256": "fb9fbd556d6e05d04035db8851b5ebf1c0441424cf953e624dac0a13a706514a"
+}

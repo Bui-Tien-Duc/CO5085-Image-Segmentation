@@ -1,0 +1,21 @@
+{
+  "model": "mlp",
+  "dropout": 0.0,
+  "epochs": 10,
+  "batch_size": 64,
+  "lr": 0.001,
+  "seed": 42,
+  "smoke": false,
+  "split_sha256": "fb9fbd556d6e05d04035db8851b5ebf1c0441424cf953e624dac0a13a706514a",
+  "normalization": {
+    "mean": 0.2858857184540482,
+    "std": 0.3529602921170978,
+    "computed_from": "54000 training images only; pixel / 255"
+  },
+  "optimizer": "Adam",
+  "weight_decay": 0,
+  "selection": "highest validation accuracy; earliest tie",
+  "parameters": 235146,
+  "torch": "2.11.0+cu128",
+  "device": "cuda"
+}

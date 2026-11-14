@@ -1,0 +1,16 @@
+{
+  "run": "softmax_v1",
+  "model": "softmax",
+  "dropout": 0.0,
+  "test_samples": 10000,
+  "accuracy": 0.8423,
+  "macro_f1": 0.8413669120593085,
+  "loss": 0.45127091088294985,
+  "best_epoch": 9,
+  "best_val_accuracy": 0.8516666666666667,
+  "parameters": 7850,
+  "train_val_seconds": 46.81875080001191,
+  "seed": 42,
+  "checkpoint_sha256": "e8b0da48e6a2cec23f8b8c7dfd014fc9b264c657dd10ce7e1c3452361c7b5e38",
+  "split_sha256": "fb9fbd556d6e05d04035db8851b5ebf1c0441424cf953e624dac0a13a706514a"
+}

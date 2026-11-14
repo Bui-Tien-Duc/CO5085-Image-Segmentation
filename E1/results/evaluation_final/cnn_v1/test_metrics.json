@@ -1,0 +1,16 @@
+{
+  "run": "cnn_v1",
+  "model": "cnn",
+  "dropout": 0.0,
+  "test_samples": 10000,
+  "accuracy": 0.9128,
+  "macro_f1": 0.9126217596821125,
+  "loss": 0.2519460292577744,
+  "best_epoch": 8,
+  "best_val_accuracy": 0.9163333333333333,
+  "parameters": 206922,
+  "train_val_seconds": 53.84748840003158,
+  "seed": 42,
+  "checkpoint_sha256": "1f53cd3726eb605e07b502ab5b815acc0c2394ca8c523ce5048988bbdb5470af",
+  "split_sha256": "fb9fbd556d6e05d04035db8851b5ebf1c0441424cf953e624dac0a13a706514a"
+}

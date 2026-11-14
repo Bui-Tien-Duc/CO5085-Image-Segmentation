@@ -1,0 +1,11 @@
+{
+  "status": "completed",
+  "training_performed": false,
+  "test_samples_per_model": 10000,
+  "runs": [
+    "softmax_v1",
+    "mlp_v1",
+    "cnn_v1",
+    "mlp_dropout05_v1"
+  ]
+}
