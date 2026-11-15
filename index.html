@@ -27,13 +27,31 @@
 <p>Bùi Tiến Đức · MSSV 2680018</p>
 </header>
 <nav aria-label="Điều hướng trang">
-<div class="inner"><a href="#exercises">Bài tập E1–E3</a>
+<div class="inner"><a href="#a2">A2 — U-Net và UNet++</a><a href="#exercises">Bài tập E1–E3</a>
 <a href="#a1">A1.1 — Dữ liệu &amp; protocol</a>
 <a href="#a1-2">A1.2 — Kết quả test</a>
 <a href="#detection">Detection 26/10</a><a href="#overview">Giới thiệu</a><a href="#dataset">Dữ liệu</a><a href="#method">Phương pháp</a><a href="#results">Kết quả</a><a href="#evidence">Minh chứng</a><a href="#resources">Mã nguồn &amp; báo cáo</a>
 </div>
 </nav>
-<main><section aria-labelledby="exercises-title" class="panel" id="exercises"><h2 id="exercises-title">Bài tập E1–E3</h2><p>Fashion-MNIST đã chuẩn bị với 54.000 train, 6.000 validation và 10.000 test, seed 42. E1 đã hoàn thành bốn thực nghiệm và đánh giá test; E2–E3 chưa hoàn thành.</p><div class="table-wrap"><table><thead><tr><th>Bài</th><th>Nội dung</th><th>Hạn 23:59 GMT+7</th><th>Trạng thái</th></tr></thead><tbody><tr><td>E1</td><td>Softmax, MLP, CNN và Dropout</td><td>02/11/2026</td><td>Đã thực nghiệm; CNN test Accuracy 91,28%</td></tr><tr><td>E2</td><td>MSA tự viết/PyTorch và ≥ 2 tokenization</td><td>02/11/2026</td><td>Chưa thực hiện</td></tr><tr><td>E3</td><td>LSTM, GRU và baseline E1</td><td>09/11/2026</td><td>Chưa thực hiện</td></tr></tbody></table></div><p>Paper dự kiến: Dropout (JMLR 2014), External Attention (IEEE TPAMI 2023), Recurrent Attention Unit (Neurocomputing 2023). Các mở rộng không thay thế yêu cầu bắt buộc và chưa được ghi nhận là đã tái lập.</p><div class="links"><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E1">E1 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E2">E2 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E3">E3 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/Exercises">Protocol và khung báo cáo</a></div><h3>E1 — Kết quả Fashion-MNIST</h3><p>10 epochs, batch 64, Adam, seed 42. Checkpoint chọn bằng validation Accuracy. Test Accuracy: Softmax 84,23%; MLP 88,40%; CNN 91,28%; MLP + Dropout 0,5: 87,31%. Một seed; chưa tái lập đầy đủ paper Dropout.</p><div class="links"><a class="btn secondary" href="E1/results/evaluation_final/E1_report.html">E1 — Báo cáo có hình</a><a class="btn secondary" href="reports/E1_Bui_Tien_Duc_2680018.pdf">E1 — PDF tạm thời</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/e1-fashionmnist-v1">E1 — Bốn checkpoint</a></div><p class="muted">Đã công bố <a href="reports/E1_Bui_Tien_Duc_2680018.pdf">PDF kết quả E1 tạm thời</a>. Báo cáo PDF chung E1–E3 sẽ được bổ sung sau khi hoàn thành các chương E2 và E3.</p></section>
+<main><section class="panel" id="a2">
+<h2>A2.2 — So sánh U-Net và UNet++ trên CamVid</h2>
+<p>Bùi Tiến Đức · MSSV 2680018 · CO5085. Đã huấn luyện hai mô hình trong 10 epochs và đánh giá trên toàn bộ 233 ảnh test. Checkpoint chọn bằng validation mIoU.</p>
+<div class="table-wrap"><table><thead><tr><th>Mô hình</th><th>Best epoch</th><th>Validation mIoU</th><th>Test mIoU</th><th>Test mean Dice</th></tr></thead><tbody><tr><td>U-Net</td><td>9</td><td>44,34%</td><td>38,06%</td><td>44,69%</td></tr><tr><td>UNet++</td><td>10</td><td>43,09%</td><td>39,54%</td><td>45,49%</td></tr></tbody></table></div>
+<p>UNet++ tăng test mIoU khoảng 1,48 điểm phần trăm, nhưng best validation mIoU thấp hơn U-Net. Một seed và 10 epochs chưa đủ để khẳng định ưu thế tổng quát. Pole, Pedestrian và Bicyclist có test IoU bằng 0; pixel accuracy UNet++ 84,92% không phản ánh đầy đủ mọi lớp.</p>
+<p>Cùng split CamVid 367 train / 101 validation / 233 test; 11 lớp, ảnh 256×256, batch 2, base 16, AdamW lr 0,001, weight decay 0,01, seed 42. Cross entropy bỏ qua nhãn 255; không augmentation. UNet++ một đầu ra, không deep supervision hoặc pruning; không tái lập đầy đủ paper ảnh y sinh.</p>
+<p>Paper: Zhou et al., <em>UNet++: Redesigning Skip Connections to Exploit Multiscale Features in Image Segmentation</em>, IEEE TMI 39(6), 1856–1867, 2020. <a href="https://doi.org/10.1109/TMI.2019.2959609">DOI</a> · <a href="https://github.com/MrGiovanni/UNetPlusPlus">Code tác giả</a>.</p>
+<div class="links">
+<a class="btn" href="A2/Bao_cao_Bui_Tien_Duc_2680018_cap_nhat.pdf">Báo cáo PDF A2 cập nhật</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2">Code và README A2</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/Video-a2-camvid-v1">Video demo A2</a>
+<a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a2-camvid-checkpoints-v1/unetpp_camvid_best.pt">Tải checkpoint UNet++</a>
+<a class="btn secondary" href="A2/results/evaluation_unetpp_v1/test_metrics.json">Test metrics UNet++</a></div>
+<p class="muted">Checkpoint SHA256: <code style="overflow-wrap:anywhere">2a9247457a163591212fa4357dcf93c43ee44104cb5ad9683e68898e974b0abb</code>. <a href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a2-camvid-checkpoints-v1">Release checkpoint</a>. Video nằm trong mục Assets của Release video.</p>
+<div class="gallery">
+<figure class="figure full"><img src="A2/results/comparison_curves.png" alt="So sánh validation loss và mIoU của U-Net và UNet++" loading="lazy"><figcaption>Validation qua 10 epochs, từ history.csv của từng mô hình.</figcaption></figure>
+<figure class="figure"><img src="A2/results/unetpp_class_iou.png" alt="IoU test từng lớp UNet++" loading="lazy"><figcaption>Chất lượng phân đoạn không đồng đều giữa 11 lớp.</figcaption></figure>
+<figure class="figure"><img src="A2/results/evaluation_unetpp_v1/sample_predictions.png" alt="Ảnh test CamVid, nhãn thật và dự đoán UNet++" loading="lazy"><figcaption>Hai ảnh minh họa; metrics được tính trên đủ 233 ảnh.</figcaption></figure>
+</div></section><section aria-labelledby="exercises-title" class="panel" id="exercises"><h2 id="exercises-title">Bài tập E1–E3</h2><p>Fashion-MNIST đã chuẩn bị với 54.000 train, 6.000 validation và 10.000 test, seed 42. E1 đã hoàn thành bốn thực nghiệm và đánh giá test; E2–E3 chưa hoàn thành.</p><div class="table-wrap"><table><thead><tr><th>Bài</th><th>Nội dung</th><th>Hạn 23:59 GMT+7</th><th>Trạng thái</th></tr></thead><tbody><tr><td>E1</td><td>Softmax, MLP, CNN và Dropout</td><td>02/11/2026</td><td>Đã thực nghiệm; CNN test Accuracy 91,28%</td></tr><tr><td>E2</td><td>MSA tự viết/PyTorch và ≥ 2 tokenization</td><td>02/11/2026</td><td>Chưa thực hiện</td></tr><tr><td>E3</td><td>LSTM, GRU và baseline E1</td><td>09/11/2026</td><td>Chưa thực hiện</td></tr></tbody></table></div><p>Paper dự kiến: Dropout (JMLR 2014), External Attention (IEEE TPAMI 2023), Recurrent Attention Unit (Neurocomputing 2023). Các mở rộng không thay thế yêu cầu bắt buộc và chưa được ghi nhận là đã tái lập.</p><div class="links"><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E1">E1 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E2">E2 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/E3">E3 — Kế hoạch và code</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/Exercises">Protocol và khung báo cáo</a></div><h3>E1 — Kết quả Fashion-MNIST</h3><p>10 epochs, batch 64, Adam, seed 42. Checkpoint chọn bằng validation Accuracy. Test Accuracy: Softmax 84,23%; MLP 88,40%; CNN 91,28%; MLP + Dropout 0,5: 87,31%. Một seed; chưa tái lập đầy đủ paper Dropout.</p><div class="links"><a class="btn secondary" href="E1/results/evaluation_final/E1_report.html">E1 — Báo cáo có hình</a><a class="btn secondary" href="reports/E1_Bui_Tien_Duc_2680018.pdf">E1 — PDF tạm thời</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/e1-fashionmnist-v1">E1 — Bốn checkpoint</a></div><p class="muted">Đã công bố <a href="reports/E1_Bui_Tien_Duc_2680018.pdf">PDF kết quả E1 tạm thời</a>. Báo cáo PDF chung E1–E3 sẽ được bổ sung sau khi hoàn thành các chương E2 và E3.</p></section>
 <section class="panel" id="overview">
 <h2>1. Giới thiệu đề tài</h2>
 <p>Semantic Segmentation là bài toán gán nhãn ngữ nghĩa cho từng pixel của ảnh. Bài thực hành này xây dựng một pipeline gồm đọc ảnh và mask, tiền xử lý, huấn luyện mô hình U-Net, đánh giá bằng mIoU/Dice và trực quan hóa kết quả dự đoán.</p>
@@ -56,7 +74,7 @@
 <div class="metrics"><div class="metric"><strong>0.4434</strong><span>Best Validation mIoU (epoch 9)</span></div><div class="metric"><strong>0.3806</strong><span>Test mIoU</span></div><div class="metric"><strong>0.4469</strong><span>Test Mean Dice</span></div><div class="metric"><strong>0.5489</strong><span>Test Loss</span></div></div>
 <p class="muted">Metrics được tính từ confusion matrix cộng dồn trên toàn bộ tập test, bỏ qua pixel nhãn 255 và lấy trung bình trên các lớp có union lớn hơn 0. Dice là chỉ số đánh giá; hàm loss huấn luyện là Cross-Entropy.</p>
 <div class="links"><a class="btn secondary" href="A2/results/test_metrics_verified.txt">Kết quả kiểm chứng checkpoint</a><a class="btn secondary" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/blob/main/A2/verify_checkpoint.py">Script đánh giá toàn bộ tập test</a></div>
-<p>Kết quả cho thấy pipeline đã huấn luyện và đánh giá thành công. Đây là baseline để tiếp tục so sánh với UNet++ trong A2.</p>
+<p>Kết quả cho thấy pipeline đã huấn luyện và đánh giá thành công. Xem phần A2.2 ở trên để so sánh với UNet++ đã hoàn thành.</p>
 </section>
 <section class="panel" id="evidence">
 <h2>5. Hình minh chứng thực nghiệm</h2>
@@ -70,8 +88,8 @@
 </section>
 <section class="panel" id="resources">
 <h2>6. Mã nguồn, báo cáo và tài liệu</h2>
-<div class="links"><a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2" rel="noopener noreferrer" target="_blank">Mã nguồn Python</a><a class="btn secondary" href="reports/B%C3%A1o%20c%C3%A1o%20B%C3%B9i%20Ti%E1%BA%BFn%20%C4%90%E1%BB%A9c%20MSSV%202680018.pdf" rel="noopener noreferrer" target="_blank">Báo cáo PDF</a><a class="btn secondary" href="https://github.com/stonewst/CamVid-for-Segmentation" rel="noopener noreferrer" target="_blank">Nguồn CamVid</a></div>
-<h3>Định hướng A2</h3><p>So sánh U-Net và UNet++ cho bài toán phân đoạn ngữ nghĩa ảnh giao thông đô thị. UNet++ được đề xuất trong lĩnh vực ảnh y sinh; nghiên cứu dự kiến đánh giá khả năng áp dụng kiến trúc này trên CamVid.</p>
+<div class="links"><a class="btn" href="https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/tree/main/A2" rel="noopener noreferrer" target="_blank">Mã nguồn Python</a><a class="btn secondary" href="A2/Bao_cao_Bui_Tien_Duc_2680018_cap_nhat.pdf" rel="noopener noreferrer" target="_blank">Báo cáo PDF</a><a class="btn secondary" href="https://github.com/stonewst/CamVid-for-Segmentation" rel="noopener noreferrer" target="_blank">Nguồn CamVid</a></div>
+<h3>Định hướng A2</h3><p>So sánh U-Net và UNet++ cho bài toán phân đoạn ngữ nghĩa ảnh giao thông đô thị. UNet++ được đề xuất trong lĩnh vực ảnh y sinh; đã được điều chỉnh và đánh giá trên CamVid; xem kết quả A2.2 ở trên.</p>
 </section>
 <section class="panel" id="a1">
 <h2>A1.1 — CNN vs Vision Transformer trên PathMNIST</h2>
@@ -178,4 +196,5 @@
 <footer>CO5085 · Image Segmentation · GitHub Pages</footer>
 </body>
 </html>
+
 
