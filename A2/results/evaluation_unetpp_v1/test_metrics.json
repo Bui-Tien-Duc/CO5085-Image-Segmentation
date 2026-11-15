@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "training_performed": false,
+  "model": "unetpp",
+  "best_epoch": 10,
+  "test_samples": 233,
+  "test_loss": 0.5049297732856652,
+  "test_miou": 0.39535316824913025,
+  "test_mean_dice": 0.4549211263656616,
+  "pixel_accuracy": 0.8492193716346179,
+  "ignore_index": 255,
+  "mean_policy": "classes with union > 0; matches A2/train.py",
+  "checkpoint_sha256": "2a9247457a163591212fa4357dcf93c43ee44104cb5ad9683e68898e974b0abb",
+  "parameters": 2292139
+}

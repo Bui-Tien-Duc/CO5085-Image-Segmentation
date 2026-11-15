@@ -1,0 +1,16 @@
+{
+  "model": "unetpp",
+  "base": 16,
+  "size": 256,
+  "batch_size": 2,
+  "lr": 0.001,
+  "seed": 42,
+  "smoke": false,
+  "split_names_sha256": "35e160036d86021f9dbce4efbd5d56a6c6b6fa1029e6525c26d38bb147e3a8dc",
+  "loss": "CrossEntropy ignore_index=255",
+  "optimizer": "AdamW",
+  "weight_decay": 0.01,
+  "augmentation": "none",
+  "deep_supervision": false,
+  "selection": "highest val_miou; earliest tie"
+}
