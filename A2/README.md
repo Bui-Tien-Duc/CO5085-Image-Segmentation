@@ -1,36 +1,36 @@
-# CO5085 – Semantic Image Segmentation
+﻿# CO5085 â€“ Semantic Image Segmentation
 
-## 1. Giới thiệu
+## 1. Giá»›i thiá»‡u
 
-Bài thực hành xây dựng hệ thống phân đoạn ngữ nghĩa ảnh giao thông đô thị bằng mô hình U-Net trên bộ dữ liệu CamVid.
+BÃ i thá»±c hÃ nh xÃ¢y dá»±ng há»‡ thá»‘ng phÃ¢n Ä‘oáº¡n ngá»¯ nghÄ©a áº£nh giao thÃ´ng Ä‘Ã´ thá»‹ báº±ng mÃ´ hÃ¬nh U-Net trÃªn bá»™ dá»¯ liá»‡u CamVid.
 
-## 2. Bộ dữ liệu
+## 2. Bá»™ dá»¯ liá»‡u
 
-Nguồn tải CamVid: https://github.com/stonewst/CamVid-for-Segmentation
+Nguá»“n táº£i CamVid: https://github.com/stonewst/CamVid-for-Segmentation
 
-Dữ liệu sử dụng gồm 367 ảnh train, 101 ảnh validation và 233 ảnh test, với 11 lớp ngữ nghĩa.
+Dá»¯ liá»‡u sá»­ dá»¥ng gá»“m 367 áº£nh train, 101 áº£nh validation vÃ  233 áº£nh test, vá»›i 11 lá»›p ngá»¯ nghÄ©a.
 
-Sau khi tải, giải nén dữ liệu vào `A2/data/CamVid/`.
+Sau khi táº£i, giáº£i nÃ©n dá»¯ liá»‡u vÃ o `A2/data/CamVid/`.
 
-## 3. Môi trường
+## 3. MÃ´i trÆ°á»ng
 
-### Chuẩn bị môi trường
+### Chuáº©n bá»‹ mÃ´i trÆ°á»ng
 
-Sử dụng Python 3.11. Tại thư mục A2, tạo môi trường:
+Sá»­ dá»¥ng Python 3.11. Táº¡i thÆ° má»¥c A2, táº¡o mÃ´i trÆ°á»ng:
 
 ```powershell
 py -3.11 -m venv .venv
 ```
 
-Cài các thư viện theo phiên bản đã ghi nhận:
+CÃ i cÃ¡c thÆ° viá»‡n theo phiÃªn báº£n Ä‘Ã£ ghi nháº­n:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
 ```
 
-Bản PyTorch trong thực nghiệm là 2.11.0+cu128.
-Nếu pip không tìm thấy bản này trên nguồn mặc định, cài PyTorch
-từ nguồn wheel CUDA 12.8:
+Báº£n PyTorch trong thá»±c nghiá»‡m lÃ  2.11.0+cu128.
+Náº¿u pip khÃ´ng tÃ¬m tháº¥y báº£n nÃ y trÃªn nguá»“n máº·c Ä‘á»‹nh, cÃ i PyTorch
+tá»« nguá»“n wheel CUDA 12.8:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
@@ -40,127 +40,128 @@ từ nguồn wheel CUDA 12.8:
 .\.venv\Scripts\python.exe -m pip install torch==2.11.0+cu128 torchvision==0.26.0+cu128 --index-url https://download.pytorch.org/whl/cu128
 .\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
 
-### Chuẩn bị dữ liệu
+### Chuáº©n bá»‹ dá»¯ liá»‡u
 
-Tải CamVid từ nguồn đã dẫn và sắp xếp như sau:
+Táº£i CamVid tá»« nguá»“n Ä‘Ã£ dáº«n vÃ  sáº¯p xáº¿p nhÆ° sau:
 
 ```text
 data/CamVid/
-├── class_palette.csv
-├── train/
-├── trainannot/
-├── val/
-├── valannot/
-├── test/
-└── testannot/
+â”œâ”€â”€ class_palette.csv
+â”œâ”€â”€ train/
+â”œâ”€â”€ trainannot/
+â”œâ”€â”€ val/
+â”œâ”€â”€ valannot/
+â”œâ”€â”€ test/
+â””â”€â”€ testannot/
 ```
 
-Mask có tên tương ứng dạng <tên ảnh>_L.png.
-class_palette.csv cần có các cột name, r, g, b.
+Mask cÃ³ tÃªn tÆ°Æ¡ng á»©ng dáº¡ng <tÃªn áº£nh>_L.png.
+class_palette.csv cáº§n cÃ³ cÃ¡c cá»™t name, r, g, b.
 
-### Đánh giá checkpoint
+### ÄÃ¡nh giÃ¡ checkpoint
 
-Checkpoint được cung cấp tại results/best_unet.pt.
-Chạy tại thư mục A2:
+Checkpoint Ä‘Æ°á»£c cung cáº¥p táº¡i results/best_unet.pt.
+Cháº¡y táº¡i thÆ° má»¥c A2:
 
 ```powershell
 .\.venv\Scripts\python.exe .\verify_checkpoint.py
 ```
 
-Kết quả tham chiếu trên 233 ảnh test:
-loss khoảng 0.5489, mIoU khoảng 0.3806, Mean Dice khoảng 0.4469.
-Sai lệch nhỏ có thể xuất hiện giữa các môi trường.
+Káº¿t quáº£ tham chiáº¿u trÃªn 233 áº£nh test:
+loss khoáº£ng 0.5489, mIoU khoáº£ng 0.3806, Mean Dice khoáº£ng 0.4469.
+Sai lá»‡ch nhá» cÃ³ thá»ƒ xuáº¥t hiá»‡n giá»¯a cÃ¡c mÃ´i trÆ°á»ng.
 
-## 4. Chạy chương trình
-Các lệnh bên dưới được chạy tại thư mục A2.
-Đường dẫn .venv áp dụng khi môi trường ảo nằm trong A2.
+## 4. Cháº¡y chÆ°Æ¡ng trÃ¬nh
+CÃ¡c lá»‡nh bÃªn dÆ°á»›i Ä‘Æ°á»£c cháº¡y táº¡i thÆ° má»¥c A2.
+ÄÆ°á»ng dáº«n .venv Ã¡p dá»¥ng khi mÃ´i trÆ°á»ng áº£o náº±m trong A2.
 
-Kiểm tra dữ liệu:
+Kiá»ƒm tra dá»¯ liá»‡u:
 
 `python check_camvid.py`
 
-Huấn luyện:
+Huáº¥n luyá»‡n:
 
 `python train.py --epochs 10 --batch-size 2 --size 256`
 
 
-Đánh giá checkpoint trên toàn bộ tập test:
+ÄÃ¡nh giÃ¡ checkpoint trÃªn toÃ n bá»™ táº­p test:
 
 ```powershell
 .\.venv\Scripts\python.exe .\verify_checkpoint.py
 ```
 
-Tạo hình so sánh ảnh đầu vào, nhãn thật và dự đoán:
+Táº¡o hÃ¬nh so sÃ¡nh áº£nh Ä‘áº§u vÃ o, nhÃ£n tháº­t vÃ  dá»± Ä‘oÃ¡n:
 
 ```powershell
 .\.venv\Scripts\python.exe .\evaluate.py
 ```
 
-Trực quan hóa dữ liệu và biểu đồ:
+Trá»±c quan hÃ³a dá»¯ liá»‡u vÃ  biá»ƒu Ä‘á»“:
 
 `python show_camvid.py`
 
 `python plot_history.py`
 
-## 5. Kết quả thực nghiệm
+## 5. Káº¿t quáº£ thá»±c nghiá»‡m
 
-U-Net được huấn luyện trên CamVid trong 10 epochs,
-batch size 2, kích thước ảnh 256 × 256.
+U-Net Ä‘Æ°á»£c huáº¥n luyá»‡n trÃªn CamVid trong 10 epochs,
+batch size 2, kÃ­ch thÆ°á»›c áº£nh 256 Ã— 256.
 
 - Optimizer: AdamW.
 - Learning rate: 0.001.
 - Loss: CrossEntropyLoss, ignore_index=255.
-- Best validation mIoU: 0.4434 tại epoch 9.
+- Best validation mIoU: 0.4434 táº¡i epoch 9.
 - Test mIoU: 0.3806.
 - Test Mean Dice: 0.4469.
 - Test loss: 0.5489.
 
-Checkpoint được chọn theo validation mIoU cao nhất.
-Đã đánh giá lại checkpoint trên toàn bộ tập test;
-kết quả chi tiết lưu tại results/test_metrics_verified.txt.
+Checkpoint Ä‘Æ°á»£c chá»n theo validation mIoU cao nháº¥t.
+ÄÃ£ Ä‘Ã¡nh giÃ¡ láº¡i checkpoint trÃªn toÃ n bá»™ táº­p test;
+káº¿t quáº£ chi tiáº¿t lÆ°u táº¡i results/test_metrics_verified.txt.
 
-Hình minh họa:
+HÃ¬nh minh há»a:
 - results/prediction.png
 - results/training_curves.png
 
-## 6. Báo cáo
+## 6. BÃ¡o cÃ¡o
 
-Báo cáo đầy đủ được lưu trong thư mục `reports/` của repository.
+BÃ¡o cÃ¡o Ä‘áº§y Ä‘á»§ Ä‘Æ°á»£c lÆ°u trong thÆ° má»¥c `reports/` cá»§a repository.
 
-## 7. Tài liệu tham khảo
+## 7. TÃ i liá»‡u tham kháº£o
 
 - Ronneberger et al. (2015), U-Net.
 - Brostow et al. (2009), CamVid.
 - Zhou et al. (2020), UNet++.
 
-## A2.1 Đề tài và kế hoạch nghiên cứu
+## A2.1 Äá» tÃ i vÃ  káº¿ hoáº¡ch nghiÃªn cá»©u
 
-Đề tài: So sánh U-Net và UNet++ cho phân đoạn ngữ nghĩa
-ảnh giao thông đô thị trên CamVid.
+Äá» tÃ i: So sÃ¡nh U-Net vÃ  UNet++ cho phÃ¢n Ä‘oáº¡n ngá»¯ nghÄ©a
+áº£nh giao thÃ´ng Ä‘Ã´ thá»‹ trÃªn CamVid.
 
-Paper lựa chọn:
+Paper lá»±a chá»n:
 Z. Zhou, M. M. R. Siddiquee, N. Tajbakhsh, and J. Liang,
-“UNet++: Redesigning Skip Connections to Exploit Multiscale
-Features in Image Segmentation,” IEEE Transactions on Medical
-Imaging, vol. 39, no. 6, pp. 1856–1867, 2020.
+â€œUNet++: Redesigning Skip Connections to Exploit Multiscale
+Features in Image Segmentation,â€ IEEE Transactions on Medical
+Imaging, vol. 39, no. 6, pp. 1856â€“1867, 2020.
 DOI: 10.1109/TMI.2019.2959609.
 
-Phạm vi dự kiến: so sánh hai kiến trúc trên cùng cách chia
-CamVid, kích thước ảnh và ngân sách huấn luyện;
-đánh giá bằng mIoU và Mean Dice.
+Pháº¡m vi dá»± kiáº¿n: so sÃ¡nh hai kiáº¿n trÃºc trÃªn cÃ¹ng cÃ¡ch chia
+CamVid, kÃ­ch thÆ°á»›c áº£nh vÃ  ngÃ¢n sÃ¡ch huáº¥n luyá»‡n;
+Ä‘Ã¡nh giÃ¡ báº±ng mIoU vÃ  Mean Dice.
 
-Hiện trạng: đã hoàn thành baseline U-Net và kiểm chứng
-checkpoint. UNet++ và phần tối ưu hóa chưa thực hiện.
+Hiá»‡n tráº¡ng: Ä‘Ã£ hoÃ n thÃ nh baseline U-Net vÃ  kiá»ƒm chá»©ng
+checkpoint. UNet++ vÃ  pháº§n tá»‘i Æ°u hÃ³a chÆ°a thá»±c hiá»‡n.
 
-Áp dụng UNet++ trên CamVid chưa phải tái lập đầy đủ
-thí nghiệm ảnh y sinh trong paper gốc.
+Ãp dá»¥ng UNet++ trÃªn CamVid chÆ°a pháº£i tÃ¡i láº­p Ä‘áº§y Ä‘á»§
+thÃ­ nghiá»‡m áº£nh y sinh trong paper gá»‘c.
 
 ## Video demo
 
-[Video demo A2 – U-Net và UNet++ trên CamVid](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a2-camvid-v1)
+[Video demo A2 â€“ U-Net vÃ  UNet++ trÃªn CamVid](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/Video-a2-camvid-v1)
 
-Trong mục Assets, tải file
+Trong má»¥c Assets, táº£i file
 `A2_Demo_UNet_UNetPP_Bui_Tien_Duc_2680018.mp4`.
 
-Video minh họa nạp checkpoint, đánh giá trên 233 ảnh test,
-xem hình phân đoạn và thảo luận kết quả.
+Video minh há»a náº¡p checkpoint, Ä‘Ã¡nh giÃ¡ trÃªn 233 áº£nh test,
+xem hÃ¬nh phÃ¢n Ä‘oáº¡n vÃ  tháº£o luáº­n káº¿t quáº£.
+
