@@ -37,6 +37,9 @@ từ nguồn wheel CUDA 12.8:
 .\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
 ```
 
+.\.venv\Scripts\python.exe -m pip install torch==2.11.0+cu128 torchvision==0.26.0+cu128 --index-url https://download.pytorch.org/whl/cu128
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+
 ### Chuẩn bị dữ liệu
 
 Tải CamVid từ nguồn đã dẫn và sắp xếp như sau:
@@ -151,3 +154,13 @@ checkpoint. UNet++ và phần tối ưu hóa chưa thực hiện.
 
 Áp dụng UNet++ trên CamVid chưa phải tái lập đầy đủ
 thí nghiệm ảnh y sinh trong paper gốc.
+
+## Video demo
+
+[Video demo A2 – U-Net và UNet++ trên CamVid](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a2-camvid-v1)
+
+Trong mục Assets, tải file
+`A2_Demo_UNet_UNetPP_Bui_Tien_Duc_2680018.mp4`.
+
+Video minh họa nạp checkpoint, đánh giá trên 233 ảnh test,
+xem hình phân đoạn và thảo luận kết quả.
