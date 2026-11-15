@@ -2,7 +2,7 @@
 
 ## 1. Giới thiệu
 
-Bài thực hành xây dựng hệ thống phân đoạn ngữ nghĩa ảnh giao thông đô thị bằng mô hình U-Net trên bộ dữ liệu CamVid.
+Bài thực hành xây dựng hệ thống phân đoạn ngữ nghĩa ảnh giao thông đô thị bằng hai mô hình U-Net và UNet++ trên bộ dữ liệu CamVid.
 
 ## 2. Bộ dữ liệu
 
@@ -125,7 +125,7 @@ Hình minh họa:
 
 ## 6. Báo cáo
 
-Báo cáo đầy đủ được lưu trong thư mục `reports/` của repository.
+Báo cáo được lưu trong dự án. Bản PDF cần cập nhật kết quả A2.2 và phân tích paper trước khi chốt hồ sơ.
 
 ## 7. Tài liệu tham khảo
 
@@ -145,12 +145,77 @@ Features in Image Segmentation,” IEEE Transactions on Medical
 Imaging, vol. 39, no. 6, pp. 1856–1867, 2020.
 DOI: 10.1109/TMI.2019.2959609.
 
-Phạm vi dự kiến: so sánh hai kiến trúc trên cùng cách chia
+Phạm vi thực nghiệm: so sánh hai kiến trúc trên cùng cách chia
 CamVid, kích thước ảnh và ngân sách huấn luyện;
 đánh giá bằng mIoU và Mean Dice.
 
-Hiện trạng: đã hoàn thành baseline U-Net và kiểm chứng
-checkpoint. UNet++ và phần tối ưu hóa chưa thực hiện.
+## Kết quả A2.2
+
+Đã huấn luyện và đánh giá U-Net và UNet++ trên CamVid.
+Tập dữ liệu gồm 367 ảnh train, 101 ảnh validation và 233 ảnh test.
+
+| Mô hình | Best epoch | Test mIoU | Test mean Dice | Test loss |
+|---|---:|---:|---:|---:|
+| U-Net | 9 | 38,06% | 44,69% | 0,548879 |
+| UNet++ | 10 | 39,54% | 45,49% | 0,504930 |
+
+Trong thí nghiệm hiện tại, UNet++ tăng khoảng 1,48 điểm phần trăm
+mIoU và 0,80 điểm phần trăm mean Dice so với U-Net.
+
+Phạm vi: ảnh 256×256, batch size 2, 10 epochs, seed 42;
+AdamW, learning rate 0.001, weight decay 0.01;
+CrossEntropyLoss với ignore_index=255, không augmentation.
+Checkpoint được chọn theo validation mIoU cao nhất, không theo test.
+Bản UNet++ dùng base 16, một đầu ra và không deep supervision;
+có 2.292.139 tham số. Đây là bản điều chỉnh cho CamVid,
+chưa tái lập đầy đủ paper gốc.
+
+UNet++ đạt validation mIoU 43,09% tại epoch 10;
+test pixel accuracy 84,92% trên đủ 233 ảnh test.
+Hạn chế: Pole, Pedestrian và Bicyclist có test IoU bằng 0;
+SignSymbol và Fence có IoU gần 0. Pixel accuracy không phản ánh
+đầy đủ chất lượng phân đoạn từng lớp. Kết quả một seed và 10 epochs
+chưa đủ để khẳng định ưu thế tổng quát của UNet++.
+
+Kết quả chi tiết:
+
+- [U-Net đã xác minh](results/test_metrics_verified.txt).
+- [UNet++ test metrics](results/evaluation_unetpp_v1/test_metrics.json).
+- [IoU/Dice từng lớp](results/evaluation_unetpp_v1/per_class_metrics.csv).
+- [Confusion matrix](results/evaluation_unetpp_v1/confusion_matrix.csv).
+- [Ảnh dự đoán](results/evaluation_unetpp_v1/sample_predictions.png).
+- [Lịch sử train UNet++](results/unetpp_v1/history.csv).
+- [Cấu hình UNet++](results/unetpp_v1/config.json).
+
+SHA256 checkpoint UNet++ đã đánh giá:
+
+```text
+2a9247457a163591212fa4357dcf93c43ee44104cb5ad9683e68898e974b0abb
+```
+
+### Chạy UNet++ bằng môi trường A1
+
+Các lệnh sau chạy tại thư mục gốc repository, sử dụng môi trường
+`A1/.venv` đã có. Không cần tạo lại môi trường nếu đã chạy thành công.
+
+```powershell
+.\A1\.venv\Scripts\python.exe -u .\A2\check_unetpp.py
+.\A1\.venv\Scripts\python.exe -u .\A2\train_unetpp.py --data .\A2\data\CamVid --epochs 10 --batch-size 2 --output .\A2\results\unetpp_v1
+```
+
+Nếu đã hoàn thành lượt train thì không chạy lại. Nếu bị ngắt,
+chạy cùng lệnh train và thêm `--resume`; epoch đang dở sẽ chạy lại
+sau epoch cuối đã lưu trong `last.pt`.
+
+Đánh giá checkpoint đã chọn, không huấn luyện thêm:
+
+```powershell
+.\A1\.venv\Scripts\python.exe -u .\A2\evaluate_unetpp.py --data .\A2\data\CamVid --checkpoint .\A2\results\unetpp_v1\best.pt --output .\A2\results\evaluation_unetpp_v1
+```
+
+Trạng thái hồ sơ: thực nghiệm hai mô hình và video demo đã có;
+phân tích paper đầy đủ, PDF và website cần được cập nhật đồng bộ.
+
 
 Áp dụng UNet++ trên CamVid chưa phải tái lập đầy đủ
 thí nghiệm ảnh y sinh trong paper gốc.
