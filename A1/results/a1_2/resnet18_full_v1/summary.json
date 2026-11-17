@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "purpose": "full_train_validation",
+  "epochs_completed": 10,
+  "best_epoch": 7,
+  "best_val_macro_f1": 0.9263298160458588,
+  "best_val_loss": 0.3039591090291178,
+  "train_seconds": 11974.63317460008,
+  "validation_seconds": 384.21973690000596,
+  "peak_allocated_gib": 0.2783999443054199,
+  "last_epoch_train_samples": 89996,
+  "last_epoch_val_samples": 10004,
+  "test_evaluated": false,
+  "checkpoint_reload": "ok"
+}

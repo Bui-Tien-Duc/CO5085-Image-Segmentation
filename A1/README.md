@@ -4,6 +4,61 @@ Sinh viên: Bùi Tiến Đức
 MSSV: 2680018  
 Môn học: CO5085
 
+## Kết quả cập nhật ngày 17/11/2026
+
+Đã huấn luyện và đánh giá năm cấu hình trên cùng split PathMNIST.
+Checkpoint được chọn bằng validation Macro-F1 cao nhất; hòa thì chọn validation loss thấp hơn.
+
+| Cấu hình | Best epoch | Val Macro-F1 | Test Accuracy | Test Macro-F1 |
+|---|---:|---:|---:|---:|
+| ResNet-18 scratch | 8 | 88,28% | 86,04% | 78,89% |
+| ResNet-18 head | 6 | 87,22% | 82,77% | 76,20% |
+| ResNet-18 partial | 7 | 94,06% | 86,00% | 80,04% |
+| ResNet-18 full | 7 | 92,63% | 86,60% | 78,32% |
+| ViT head | 2 | 94,09% | 90,24% | 85,92% |
+
+Full đúng nhiều hơn scratch 40 ảnh, nhưng Macro-F1 thấp hơn 0,57 điểm phần trăm.
+Partial có Macro-F1 cao nhất trong nhóm ResNet-18; ViT head cao nhất trong năm cấu hình.
+Learning rate scratch 1e-4, head 1e-3, partial/full 1e-5; một seed và 10 epochs.
+Không quy toàn bộ chênh lệch cho pretraining, freeze hoặc kiến trúc.
+Scratch/full đều cập nhật 11.181.129 tham số. Test loss tương ứng 4,8429 và 0,8574.
+Lớp stroma có F1 scratch 42,55%, full 34,51%; cần xem kết quả từng lớp thay vì chỉ Accuracy.
+
+- [PDF A1 cập nhật](../reports/A1_2_Bui_Tien_Duc_2680018.pdf)
+- [Word A1 cập nhật](../reports/A1_2_Bui_Tien_Duc_2680018.docx)
+- [Bảng scratch và full](results/a1_2/evaluation_scratch_full_v1/comparison.csv)
+- [HTML scratch và full](results/a1_2/evaluation_scratch_full_v1/A1_2_report.html)
+- [Test metrics scratch](results/a1_2/evaluation_scratch_full_v1/scratch/test_metrics.json)
+- [Test metrics full](results/a1_2/evaluation_scratch_full_v1/full/test_metrics.json)
+- [Release scratch và full](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/tag/a1-resnet18-scratch-full-v1)
+- [Tải scratch best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-resnet18-scratch-full-v1/resnet18_scratch_best.pt)
+- [Tải full best.pt](https://github.com/Bui-Tien-Duc/CO5085-Image-Segmentation/releases/download/a1-resnet18-scratch-full-v1/resnet18_full_best.pt)
+
+SHA256 đã đối chiếu với digest do GitHub cung cấp:
+
+```text
+Scratch: 4659c93798fa99e66e82bfaf8dc39a7bf038c88e29d60cc8b150c122866c9c80
+Full:    5009069f4a937abf4bd02cdd5a13fd537ac94f424ae90fcda1fdf650c1ff9825
+```
+
+### Tái lập đánh giá scratch và full
+
+Không cần chạy lại để xem kết quả. Khi cần tái lập, đặt checkpoint tải về thành
+`best.pt` trong thư mục run tương ứng, giữ nguyên config/history/summary:
+
+- `A1/results/a1_2/resnet18_scratch_v1/best.pt`
+- `A1/results/a1_2/resnet18_full_v1/best.pt`
+
+Chạy tại gốc repository, dùng thư mục output mới:
+
+```powershell
+.\A1\.venv\Scripts\python.exe -u .\A1\evaluate_scratch_full.py --output .\A1\results\a1_2\evaluation_scratch_full_recheck
+```
+
+Script kiểm tra checksum dữ liệu, metadata và checkpoint, chỉ đánh giá test;
+không huấn luyện hoặc chọn lại checkpoint theo test. Các phần bên dưới lưu
+protocol và lịch sử ba cấu hình công bố trước đó. Không cần đưa `last.pt` lên GitHub.
+
 ## Dataset
 
 - PathMNIST: 107.180 ảnh RGB, 9 lớp.
@@ -106,7 +161,7 @@ Notebook đã được chạy và lưu minh chứng kiểm tra pipeline. Các fi
 
 ## Phần còn lại
 
-Đã hoàn thành ResNet-18 head và partial, mỗi cấu hình 10 epochs và đánh giá toàn bộ test. ViT head đã hoàn thành 10 epochs và đánh giá test. Scratch, full và ViT partial chưa thực hiện; đã có so sánh CNN–Transformer ở chế độ head. Kế hoạch tám cấu hình ở trên là phạm vi dự kiến.
+Đã hoàn thành năm cấu hình: ResNet-18 scratch, pretrained head, partial, full và ViT head; mỗi cấu hình 10 epochs và đánh giá toàn bộ 7.180 ảnh test. ViT scratch, partial và full chưa thực hiện. Kế hoạch tám cấu hình ở trên là phạm vi mở rộng, chưa phải toàn bộ kết quả đã chạy.
 
 Phạm vi tái lập tập trung vào PathMNIST; các cấu hình ResNet-18 và freeze là phần thí nghiệm mở rộng, không được coi là đã tái lập toàn bộ paper.
 
@@ -181,3 +236,4 @@ Script chỉ evaluate ViT và đọc lại metrics CNN trong `evaluation_final`;
 - [PDF cập nhật](../reports/A1_2_Bui_Tien_Duc_2680018.pdf)
 
 `last.pt` phục vụ resume, không phải checkpoint để đánh giá cuối và không cần đưa lên Git.
+

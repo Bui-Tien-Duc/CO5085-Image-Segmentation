@@ -1,0 +1,6 @@
+﻿model,mode,best_epoch,test_accuracy_percent,test_macro_f1_percent
+resnet18,scratch,8,86.04,78.89
+resnet18,head,6,82.77,76.20
+resnet18,partial,7,86.00,80.04
+resnet18,full,7,86.60,78.32
+vit,head,2,90.24,85.92
